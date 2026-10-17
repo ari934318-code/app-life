@@ -18,6 +18,10 @@ jobs:
           cp index.html manifest.webmanifest sw.js icon-192.png icon-512.png icon-maskable-512.png www/
       - run: npm i @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
       - run: npx cap add android && npx cap sync android
+      - name: Set app icon
+        run: |
+          rm -rf android/app/src/main/res/mipmap-anydpi-v26
+          cp -r android-icons/* android/app/src/main/res/
       - name: Set version
         run: |
           V=$(cat VERSION)
@@ -25,8 +29,8 @@ jobs:
           CODE=$(git rev-list --count HEAD)
           sed -i "s/versionCode 1/versionCode $CODE/; s/versionName \"1.0\"/versionName \"$V\"/" android/app/build.gradle
       - run: cd android && ./gradlew assembleDebug
-      - run: cp android/app/build/outputs/apk/debug/app-debug.apk planner-v$V.apk
+      - run: cp android/app/build/outputs/apk/debug/app-debug.apk flowerlife-v$V.apk
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.V }}
-          files: planner-v*.apk
+          files: flowerlife-v*.apk

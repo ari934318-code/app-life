@@ -7,12 +7,12 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="برنامه‌ریزی">
+<meta name="apple-mobile-web-app-title" content="فلاور لایف">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
-<title>برنامه‌ریزی هفتگی من</title>
+<title>فلاور لایف</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200;300;400;500&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
@@ -174,6 +174,45 @@ textarea.in{resize:vertical;min-height:72px;width:100%;display:block}
 #tip{position:fixed;left:0;top:0;z-index:40;pointer-events:none;padding:7px 12px;border-radius:12px;background:rgba(20,20,24,.86);border:1px solid var(--gl);
   -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);font:300 12.5px/1.6 var(--fb);max-width:260px;white-space:pre-line;direction:rtl}
 .sec{display:flex;flex-direction:column;gap:12px}
+.gc{position:relative;overflow:hidden}
+.gc svg{width:60px}
+.live .fbig{position:relative}
+.sway{transform-origin:120px 250px;transform-box:view-box}
+.canopy{transform-origin:120px 150px;transform-box:view-box}
+.windy .sway{animation:sw 5.2s ease-in-out infinite}
+.windy .canopy{animation:sw2 3.4s ease-in-out infinite}
+@keyframes sw{0%,100%{transform:rotate(-1.3deg)}50%{transform:rotate(1.3deg)}}
+@keyframes sw2{0%,100%{transform:rotate(1.2deg) translateX(-1px)}50%{transform:rotate(-1.2deg) translateX(1px)}}
+.petals{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.petal{position:absolute;width:7px;height:9px;border-radius:70% 0 70% 0;background:linear-gradient(135deg,#fde2ec,#f08fb0);opacity:0;animation:fall linear infinite}
+@keyframes fall{0%{opacity:0;transform:translate(0,0) rotate(0)}12%{opacity:.95}85%{opacity:.8}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot))}}
+@media (prefers-reduced-motion:reduce){.windy .sway,.windy .canopy,.petal{animation:none!important}.petal{display:none!important}}
+.pick .pc svg.tr{height:72px}
+.stk{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+.stk span{font-size:12.5px;color:var(--ink2);border:1px solid var(--gl);border-radius:999px;padding:3px 12px;background:rgba(255,255,255,.04)}
+.stp{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.stp:last-of-type{border:0}
+.stp .ico svg{width:34px;height:46px;display:block}
+.stp .ico svg.tr{height:38px}
+.stp b{flex:1;font:400 14px var(--fb);min-width:0}
+.ctr{display:flex;align-items:center;gap:4px}
+.ctr button{width:34px;height:34px;border-radius:50%;border:1px solid var(--gl);background:rgba(255,255,255,.07);color:var(--ink);font:400 18px/1 var(--fb);cursor:pointer;padding:0}
+.ctr button:disabled{opacity:.3;cursor:default}
+.ctr span{min-width:54px;text-align:center;font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.gprev{display:flex;justify-content:center;padding:10px 0 4px}
+.gprev svg{width:min(100%,260px);height:auto;max-height:260px}
+.gcnt{text-align:center;font-size:13px;color:var(--muted)}
+.glist{list-style:none;margin:0;padding:0}
+.glist li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:13.5px}
+.glist li:last-child{border:0}
+.glist small{display:block;color:var(--muted);font-size:11.5px}
+.glist .acts{display:flex;gap:6px}
+.gift{max-width:520px;margin:0 auto;text-align:center;display:flex;flex-direction:column;gap:14px;padding-block:28px}
+.gift h1{font:700 30px/1.4 var(--fd);margin:0;color:#fff}
+.gift .msg{font-size:15.5px;line-height:2;color:var(--ink);text-wrap:balance}
+.gift .gprev svg{width:min(100%,320px);max-height:340px}
+.gift .gprev{position:relative}
+.gift a{color:var(--red-hi)}
 </style>
 </head><body>
 <div class="bg" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i></div>
@@ -184,6 +223,9 @@ textarea.in{resize:vertical;min-height:72px;width:100%;display:block}
 <linearGradient id="gRsB" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#6e1226"/><stop offset="1" stop-color="#cc3650"/></linearGradient>
 <linearGradient id="gRsC" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#8c1e34"/><stop offset="1" stop-color="#ea6279"/></linearGradient>
 <linearGradient id="gLy" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#a9a7a0"/><stop offset="1" stop-color="#f8f7f3"/></linearGradient>
+<linearGradient id="gLyP" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#b8527a"/><stop offset="1" stop-color="#ffd3e4"/></linearGradient>
+<linearGradient id="gLyR" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#6c0c1f"/><stop offset="1" stop-color="#e3394f"/></linearGradient>
+<linearGradient id="gBk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a8774a"/><stop offset="1" stop-color="#5a381d"/></linearGradient>
 <linearGradient id="gLoA" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#5f5086"/><stop offset="1" stop-color="#b9acd9"/></linearGradient>
 <linearGradient id="gLoB" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#7a6ba2"/><stop offset="1" stop-color="#d6cbea"/></linearGradient>
 <linearGradient id="gLoC" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#a396c6"/><stop offset="1" stop-color="#f2eef9"/></linearGradient>
@@ -246,17 +288,29 @@ const hrs=m=>fa((Math.round(m/6)/10).toString().replace('.','٫'));
 const MOODS=[['🤩','عالی'],['😊','خوب'],['😐','معمولی'],['😴','خسته'],['😔','دلگیر'],['😢','غمگین'],['😠','عصبی']];
 const FLW={
  poppy:{name:'شقایق',mins:10,kind:'single'},
+ lilyR:{name:'سوسن قرمز',mins:15,kind:'single'},
  rose:{name:'گل‌سرخ',mins:30,kind:'single'},
  lily:{name:'سوسن سفید',mins:60,kind:'single'},
+ lilyP:{name:'سوسن صورتی',mins:60,kind:'single'},
  lotus:{name:'نیلوفر',mins:120,kind:'single'},
+ orange:{name:'درخت پرتقال',mins:240,kind:'tree',fruit:'orange'},
+ apple:{name:'درخت سیب',mins:240,kind:'tree',fruit:'apple'},
+ cherry:{name:'درخت گیلاس',mins:240,kind:'tree',fruit:'cherry'},
+ sakura:{name:'درخت ساکورا',mins:240,kind:'tree'},
  bq4:{name:'دسته‌گل شب',mins:240,kind:'bouquet'},
  bq5:{name:'دسته‌گل بزرگ',mins:300,kind:'bouquet'}
 };
 const FKEYS=Object.keys(FLW);
+const SINGLES=FKEYS.filter(k=>FLW[k].kind==='single');
+const APP_VER='1.3.0',YIELD=5,BQ_MAX=30,BK_MAX=10;
+const FR={orange:{n:'پرتقال',c:'#f08a24',h:'#ffc46b'},apple:{n:'سیب',c:'#c9283c',h:'#f26a78'},cherry:{n:'گیلاس',c:'#8e1230',h:'#d6455e'}};
+const FRK=Object.keys(FR);
+const GIFT_BASE=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://ari934318-code.github.io/app-life/';
+const APP_URL='https://github.com/ari934318-code/app-life/releases';
 /* ---------- state ---------- */
 const tj=jOf(todayIso());
 const S={tab:'plan',seg:'week',sel:todayIso(),mA:{jy:tj.jy,jm:tj.jm},yA:tj.jy,demo:false,dd:null,base:null,
- rd:{days:new Map(),fl:new Map(),meta:new Map()},timeEdit:null,pick:'lily',giveConfirm:false,pending:false,refocus:false,dirty:new Set(),sig:{},migrated:false,hint:true,notif:false};
+ rd:{days:new Map(),fl:new Map(),meta:new Map()},timeEdit:null,pick:'lily',atab:'grow',bq:{},bk:{},gname:'',giveConfirm:false,pending:false,refocus:false,dirty:new Set(),sig:{},migrated:false,hint:true,notif:false};
 const M=()=>S.demo?S.dd:S.rd;
 const getDay=k=>M().days.get(k);
 const tasksOf=k=>{const d=getDay(k);return d&&Array.isArray(d.tasks)?d.tasks:null};
@@ -279,6 +333,7 @@ function putDay(k,fn,mat,quiet){
  fn(d);d.k=k;m.days.set(k,d);persist('days',k,d,quiet?700:350);if(!quiet)render();}
 function putMeta(id,fn,quiet){const m=M(),cur=m.meta.get(id),d=fn(cur?clone(cur):{});m.meta.set(id,d);persist('meta',id,d,quiet?700:350);if(!quiet)render();}
 function putFlower(f){S.rd.fl.set(f.id,f);persist('flowers',f.id,f,0,true);}
+
 /* ---------- statistics ---------- */
 const dayCnt=k=>{const t=tasksOf(k)||[];return[t.filter(x=>x.d).length,t.length]};
 const dayPct=k=>{const[a,b]=dayCnt(k);return b?Math.round(a/b*100):null};
@@ -348,12 +403,14 @@ const LAYERS={
  lily:[{n:3,len:31,w:11.5,rot:60,f:'gLy',r:0},{n:3,len:31,w:11.5,rot:0,f:'gLy',r:0}],
  lotus:[{n:8,len:29,w:9.5,rot:0,f:'gLoA',r:0},{n:8,len:23,w:9,rot:22,f:'gLoB',r:0},{n:6,len:15,w:7.500,rot:10,f:'gLoC',r:0}]
 };
+LAYERS.lilyP=LAYERS.lily.map(l=>({...l,f:'gLyP'}));LAYERS.lilyR=LAYERS.lily.map(l=>({...l,f:'gLyR'}));
+const isLily=id=>id==='lily'||id==='lilyP'||id==='lilyR';
 function head(id,o,x,y,sc){
  let g=`<g transform="translate(${x} ${y}) scale(${sc})">`;
  for(const l of LAYERS[id]){const len=l.len*(.52+.48*o),w=l.w*(1.18-.18*o),d=petal(len,w,!l.r);
   for(let i=0;i<l.n;i++){const phi=(i*360/l.n+l.rot)-180;g+=`<path d="${d}" fill="url(#${l.f})" stroke="rgba(0,0,0,.28)" stroke-width=".6" transform="rotate(${(phi*o).toFixed(1)})"/>`}}
  if(id==='poppy'){g+=`<circle r="${(3.8*(.5+.5*o)).toFixed(1)}" fill="#0b0b0d"/>`;if(o>.5)for(let i=0;i<8;i++){const a=i*Math.PI/4;g+=`<circle cx="${(Math.cos(a)*6.600*o).toFixed(1)}" cy="${(Math.sin(a)*6.600*o).toFixed(1)}" r="1" fill="#0b0b0d"/>`}}
- if(id==='lily'&&o>.45)for(let i=0;i<6;i++){const a=(-90+(i-2.5)*17)*Math.PI/180,L=(14+3*(i%2))*o;const ex=Math.cos(a)*L,ey=Math.sin(a)*L;g+=`<line x1="0" y1="0" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#cfcdc6" stroke-width=".9" stroke-linecap="round"/><ellipse cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" rx="1.500" ry="2.600" fill="#3a1118" transform="rotate(${(a*180/Math.PI+90).toFixed(0)} ${ex.toFixed(1)} ${ey.toFixed(1)})"/>`}
+ if(isLily(id)&&o>.45)for(let i=0;i<6;i++){const a=(-90+(i-2.5)*17)*Math.PI/180,L=(14+3*(i%2))*o;const ex=Math.cos(a)*L,ey=Math.sin(a)*L;g+=`<line x1="0" y1="0" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#cfcdc6" stroke-width=".9" stroke-linecap="round"/><ellipse cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" rx="1.500" ry="2.600" fill="#3a1118" transform="rotate(${(a*180/Math.PI+90).toFixed(0)} ${ex.toFixed(1)} ${ey.toFixed(1)})"/>`}
  if(id==='lotus')g+=`<circle r="${(2.600*o+.8).toFixed(1)}" fill="#e8dca4"/>`;
  return g+'</g>'}
 function plant(id,p,bx,by,hmax,sc,lean){
@@ -363,10 +420,11 @@ function plant(id,p,bx,by,hmax,sc,lean){
   g+=`<path d="M0 0C9 -4 17 -3 22 -11C13 -13 5 -9 0 0Z" fill="url(#gLf)" stroke="#3f6a58" stroke-width=".6" transform="translate(${lx} ${ly}) scale(${lf*sc})"/>`;
   g+=`<path d="M0 0C-9 -4 -17 -3 -22 -11C-13 -13 -5 -9 0 0Z" fill="url(#gLf)" stroke="#3f6a58" stroke-width=".6" transform="translate(${rx} ${ry}) scale(${lf*sc*.9})"/>`}
  return g+head(id,o,hx,hy,hs)}
-function flowerSVG(id,p){
+function flowerSVG(id,p,wind){
  if(FLW[id].kind==='bouquet')return bouquetSVG(id,p);
+ if(FLW[id].kind==='tree')return treeSVG(id,p,wind);
  const sc=id==='rose'?1.05:1;
- return`<svg viewBox="-50 0 100 150" class="fl" role="img" aria-label="${esc(FLW[id].name)}">${plant(id,p,0,142,92,sc,id==='lily'?6:0)}</svg>`}
+ return`<svg viewBox="-50 0 100 150" class="fl" role="img" aria-label="${esc(FLW[id].name)}">${plant(id,p,0,142,92,sc,isLily(id)?6:0)}</svg>`}
 function bouquetSVG(id,p){
  const cfg=id==='bq4'?[['rose',-24,.00,.80,100],['poppy',24,.06,.78,100],['lily',0,.03,.98,112]]
   :[['rose',-32,.00,.74,92],['poppy',32,.07,.72,92],['lotus',-14,.04,.76,108],['lily',16,.02,.90,114],['rose',0,.10,.84,122]];
@@ -374,17 +432,93 @@ function bouquetSVG(id,p){
  g+=`<path d="M-33 108L33 108L10 152L-10 152Z" fill="url(#gWr)" stroke="rgba(255,255,255,.35)" stroke-width=".8" stroke-linejoin="round"/><path d="M-33 108L33 108" stroke="rgba(255,255,255,.55)" stroke-width="1"/>`;
  g+=`<path d="M0 119C-9 112 -14 117 -9 123C-6 126 -2 122 0 119C2 122 6 126 9 123C14 117 9 112 0 119Z" fill="#b3243a"/><circle cx="0" cy="119" r="2.600" fill="#7a1424"/>`;
  return`<svg viewBox="-70 0 140 158" class="fl" role="img" aria-label="${esc(FLW[id].name)}">${g}</svg>`}
+/* ---------- trees ---------- */
+function rngS(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const TREES={
+ orange:{leaf:['#244f38','#2f6b4a','#4f9a66','#7cc18a'],trunk:'#4a3426',kind:'round',n:9,blobs:30,wide:1,seed:11},
+ apple:{leaf:['#27533a','#357a47','#58a05a','#8cc26e'],trunk:'#503726',kind:'round',n:9,blobs:30,wide:.96,seed:23},
+ cherry:{leaf:['#1e4a3c','#2a6a50','#3f8f6a','#69b78c'],trunk:'#3d2a24',kind:'pair',n:8,blobs:30,wide:1.04,seed:37},
+ sakura:{leaf:['#d9709a','#ec93b3','#f6b8cc','#fde0ea'],trunk:'#3a2a30',kind:'sakura',n:0,blobs:46,wide:1.12,seed:51}
+};
+function treeBody(id,p){
+ const t=TREES[id],fr=FR[FLW[id].fruit]||null,R=rngS(t.seed),X=120,G=250;let s='';
+ s+=`<ellipse cx="${X}" cy="${G+2}" rx="${22+50*ease(p)}" ry="5" fill="rgba(0,0,0,.45)"/>`;
+ if(p<.1){const k=p/.1;s+=`<path d="M${X} ${G}Q${X+2} ${G-10-16*k} ${X} ${G-14-22*k}" stroke="#4f9a66" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  const lc=t.kind==='sakura'?'#f09ab8':'#58a05a';
+  s+=`<path d="M0 0C9 -5 16 -3 20 -10C11 -13 4 -9 0 0Z" fill="${lc}" transform="translate(${X} ${G-10-14*k}) scale(${.4+.7*k})"/><path d="M0 0C-9 -5 -16 -3 -20 -10C-11 -13 -4 -9 0 0Z" fill="${lc}" transform="translate(${X} ${G-16-16*k}) scale(${.4+.7*k})"/>`;return s}
+ const g=ease(cl((p-.06)/.94)),th=18+88*ease(cl(p/.72)),tw=3.2+9.5*g,lean=t.kind==='sakura'?-10*g:0,topY=G-th,bx=X,tx=X+lean;
+ const rx=(10+78*ease(cl((p-.14)/.82)))*t.wide,ry=rx*(t.kind==='sakura'?.74:.8),cx=tx,cy=topY-ry*.32;
+ let trunk=`<path d="M${bx-tw/2} ${G}C${bx-tw*.35} ${G-th*.4} ${tx-tw*.28} ${topY+th*.2} ${tx-tw*.2} ${topY}L${tx+tw*.2} ${topY}C${tx+tw*.28} ${topY+th*.2} ${bx+tw*.35} ${G-th*.4} ${bx+tw/2} ${G}Z" fill="${t.trunk}"/>`;
+ trunk+=`<path d="M${bx-tw*.1} ${G}C${bx-tw*.05} ${G-th*.4} ${tx-tw*.1} ${topY+th*.2} ${tx-tw*.05} ${topY}" stroke="rgba(255,255,255,.12)" stroke-width="${Math.max(.6,tw*.12)}" fill="none"/>`;
+ let br='';const bw=.6+2.6*g;
+ [[-1,.62,.55],[1,.55,.62],[0,.8,.2],[-1,.4,.8],[1,.45,.85]].forEach(b=>{if(g<.25&&b[2]>.5)return;const by=G-th*b[1],ex=tx+b[0]*rx*b[2],ey=cy+ry*.15;
+  br+=`<path d="M${tx} ${by}Q${tx+b[0]*rx*.22} ${by-th*.15} ${ex} ${ey}" stroke="${t.trunk}" stroke-width="${bw}" stroke-linecap="round" fill="none"/>`});
+ const pts=[];for(let i=0;i<t.blobs;i++){const a=R()*Math.PI*2,r=Math.sqrt(R());pts.push([cx+Math.cos(a)*r*rx*.82,cy+Math.sin(a)*r*ry*.8,.8+R()*.5])}
+ pts.sort((a,b)=>a[1]-b[1]);
+ const u=rx/78,base=(t.kind==='sakura'?15:17)*Math.max(.35,u);let can='';
+ can+=`<ellipse cx="${cx}" cy="${cy+ry*.05}" rx="${rx*.92}" ry="${ry*.88}" fill="${t.leaf[0]}"/>`;
+ pts.forEach(q=>can+=`<circle cx="${q[0].toFixed(1)}" cy="${(q[1]+2).toFixed(1)}" r="${(base*q[2]*1.08).toFixed(1)}" fill="${t.leaf[0]}"/>`);
+ pts.forEach(q=>can+=`<circle cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="${(base*q[2]*.92).toFixed(1)}" fill="${t.leaf[1]}"/>`);
+ pts.forEach((q,i)=>{if(i%2===0)can+=`<circle cx="${(q[0]-base*.18).toFixed(1)}" cy="${(q[1]-base*.22).toFixed(1)}" r="${(base*q[2]*.62).toFixed(1)}" fill="${t.leaf[2]}"/>`});
+ pts.forEach((q,i)=>{if(i%3===0)can+=`<circle cx="${(q[0]-base*.34).toFixed(1)}" cy="${(q[1]-base*.4).toFixed(1)}" r="${(base*q[2]*.3).toFixed(1)}" fill="${t.leaf[3]}" opacity=".9"/>`});
+ if(t.kind==='sakura'&&p>.5){const k=cl((p-.5)/.4);for(let i=0;i<Math.round(26*k);i++){const a=R()*Math.PI*2,r=Math.sqrt(R());can+=`<circle cx="${(cx+Math.cos(a)*r*rx*.9).toFixed(1)}" cy="${(cy+Math.sin(a)*r*ry*.85).toFixed(1)}" r="${(1.2+R()*1.4).toFixed(1)}" fill="#fff6f9" opacity=".85"/>`}}
+ let f='';
+ if(t.n&&fr){const k=cl((p-.78)/.2),cnt=Math.round(t.n*k),rows=t.kind==='pair'?[3,2,3]:[3,3,3],ys=[-.38,.1,.56],slots=[],J=rngS(t.seed+99);
+  rows.forEach((c,ri)=>{const yf=ys[ri],w=Math.sqrt(1-yf*yf)*.78;for(let j=0;j<c;j++){const xf=c===2?(j?.3:-.3):(j-1)*.5;slots.push([xf*w*rx*(ri===1&&c===3?1:.92)+(J()-.5)*11,yf*ry*.82+(J()-.5)*9])}});
+  for(let i=0;i<t.n&&i<cnt;i++){const fx=cx+slots[i][0],fy=cy+slots[i][1],z=Math.max(.7,u);
+   if(t.kind==='pair'){const d=8*z;f+=`<path d="M${(fx-d*.1).toFixed(1)} ${(fy-9*z).toFixed(1)}Q${(fx-d*.9).toFixed(1)} ${(fy-3*z).toFixed(1)} ${(fx-d).toFixed(1)} ${fy.toFixed(1)}M${(fx-d*.1).toFixed(1)} ${(fy-9*z).toFixed(1)}Q${(fx+d*.9).toFixed(1)} ${(fy-3*z).toFixed(1)} ${(fx+d).toFixed(1)} ${(fy+z).toFixed(1)}" stroke="#2a5a3f" stroke-width="1" fill="none"/>`;
+    [[-d,0],[d,z]].forEach(o=>{f+=`<circle cx="${(fx+o[0]).toFixed(1)}" cy="${(fy+o[1]+3.4*z).toFixed(1)}" r="${(5.2*z).toFixed(1)}" fill="${fr.c}" stroke="rgba(255,255,255,.5)" stroke-width=".8"/><circle cx="${(fx+o[0]-1.3*z).toFixed(1)}" cy="${(fy+o[1]+2*z).toFixed(1)}" r="${(1.3*z).toFixed(1)}" fill="${fr.h}"/>`})}
+   else{const rr=(id==='orange'?8:7.4)*z;f+=`<circle cx="${fx.toFixed(1)}" cy="${fy.toFixed(1)}" r="${rr.toFixed(1)}" fill="${fr.c}" stroke="rgba(255,255,255,.55)" stroke-width="1"/><circle cx="${(fx-rr*.32).toFixed(1)}" cy="${(fy-rr*.34).toFixed(1)}" r="${(rr*.32).toFixed(1)}" fill="${fr.h}" opacity=".85"/>`;
+    if(id==='apple')f+=`<path d="M${fx.toFixed(1)} ${(fy-rr*.9).toFixed(1)}l1 -3.2" stroke="#3a2a1c" stroke-width="1" fill="none"/><path d="M${(fx+1).toFixed(1)} ${(fy-rr-2).toFixed(1)}q4 -3 6 0q-3 3 -6 0z" fill="#58a05a"/>`;
+    else f+=`<circle cx="${fx.toFixed(1)}" cy="${(fy-rr+.6).toFixed(1)}" r="1" fill="#2f6b4a"/>`}}}
+ return s+`<g class="sway">${trunk}<g class="canopy">${br}${can}${f}</g></g>`}
+function treeSVG(id,p,wind){return`<svg viewBox="0 0 240 270" class="fl tr${wind?' windy':''}" role="img" aria-label="${esc(FLW[id].name)}">${treeBody(id,p)}</svg>`}
+const PETALS=(()=>{const R=rngS(7);let h='<div class="petals" aria-hidden="true">';for(let i=0;i<14;i++){const l=8+R()*80,top=14+R()*30,du=6+R()*6,de=-R()*du;h+=`<i class="petal" style="left:${l.toFixed(0)}%;top:${top.toFixed(0)}%;animation-duration:${du.toFixed(1)}s;animation-delay:${de.toFixed(1)}s;--dx:${(-30+R()*70).toFixed(0)}px;--dy:${(90+R()*60).toFixed(0)}px;--rot:${(180+R()*360).toFixed(0)}deg"></i>`}return h+'</div>'})();
+/* ---------- fruit, personal bouquet, basket ---------- */
+function fruitSVG(id,x,y,r){const f=FR[id];let g='';
+ if(id==='cherry'){const d=r*.62,rr=r*.62;g+=`<path d="M${x} ${y-r*1.2}Q${x-d*.9} ${y-r*.5} ${x-d} ${y}M${x} ${y-r*1.2}Q${x+d*.9} ${y-r*.5} ${x+d} ${y+r*.1}" stroke="#2a5a3f" stroke-width="1.4" fill="none"/>`;
+  [[-d,0],[d,r*.1]].forEach(o=>g+=`<circle cx="${(x+o[0]).toFixed(1)}" cy="${(y+o[1]+rr*.5).toFixed(1)}" r="${rr.toFixed(1)}" fill="${f.c}" stroke="rgba(255,255,255,.5)" stroke-width=".9"/><circle cx="${(x+o[0]-rr*.3).toFixed(1)}" cy="${(y+o[1]+rr*.2).toFixed(1)}" r="${(rr*.28).toFixed(1)}" fill="${f.h}"/>`);return g}
+ g+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${f.c}" stroke="rgba(255,255,255,.5)" stroke-width="1"/><circle cx="${(x-r*.32).toFixed(1)}" cy="${(y-r*.34).toFixed(1)}" r="${(r*.3).toFixed(1)}" fill="${f.h}" opacity=".85"/>`;
+ if(id==='apple')g+=`<path d="M${x} ${y-r*.9}l1 -${(r*.4).toFixed(1)}" stroke="#3a2a1c" stroke-width="1.2" fill="none"/><path d="M${x+1} ${(y-r-1).toFixed(1)}q${(r*.5).toFixed(1)} -${(r*.4).toFixed(1)} ${(r*.8).toFixed(1)} 0q-${(r*.4).toFixed(1)} ${(r*.4).toFixed(1)} -${(r*.8).toFixed(1)} 0z" fill="#58a05a"/>`;
+ else g+=`<circle cx="${x}" cy="${(y-r+.8).toFixed(1)}" r="1.3" fill="#2f6b4a"/>`;
+ return g}
+function bqCustomSVG(cnt){
+ const arr=[];SINGLES.forEach(k=>{for(let i=0;i<(cnt[k]||0);i++)arr.push(k)});const n=arr.length;
+ if(!n)return'<svg viewBox="-60 0 120 120" class="fl" aria-hidden="true"></svg>';
+ const R=rngS(n*7+3);for(let i=n-1;i>0;i--){const j=Math.floor(R()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}
+ const sc=Math.max(.27,.6/Math.sqrt(1+n/6)),k=56*sc*.62,rmax=k*Math.sqrt(n+.6),pos=arr.map((id,i)=>{const a=i*2.39996,r=k*Math.sqrt(i+.6);return[id,Math.cos(a)*r*1.05,Math.sin(a)*r*.82,Math.floor(R()*360)]});
+ pos.sort((a,b)=>a[2]-b[2]);
+ const cy0=0,ext=rmax*.82+31*sc+4,coneTop=cy0+rmax*.82*.5,coneBot=coneTop+Math.max(54,rmax*.9),hw=Math.max(30,rmax*.95),W=Math.max(rmax*1.05+31*sc,hw)+14;
+ let g='';
+ for(let j=0;j<11;j++){const a=-165+j*15;g+=`<path d="M0 0C8 -7 22 -7 30 0C22 7 8 7 0 0Z" fill="#2f5445" stroke="#3f6a58" stroke-width=".6" transform="translate(${(Math.cos(a*Math.PI/180)*rmax*.72).toFixed(1)} ${(cy0+Math.sin(a*Math.PI/180)*rmax*.6).toFixed(1)}) rotate(${a}) scale(${(.55+.35*sc).toFixed(2)})"/>`}
+ pos.forEach(q=>{g+=`<g transform="rotate(${q[3]} ${q[1].toFixed(1)} ${(cy0+q[2]).toFixed(1)})">${head(q[0],1,q[1].toFixed(1),(cy0+q[2]).toFixed(1),sc)}</g>`});
+ g+=`<path d="M${-hw} ${coneTop}L${hw} ${coneTop}L${hw*.2} ${coneBot}L${-hw*.2} ${coneBot}Z" fill="url(#gWr)" stroke="rgba(255,255,255,.35)" stroke-width=".8" stroke-linejoin="round"/><path d="M${-hw} ${coneTop}L${hw} ${coneTop}" stroke="rgba(255,255,255,.55)" stroke-width="1"/>`;
+ g+=`<g transform="translate(0 ${(coneTop+9).toFixed(1)}) scale(${(Math.max(.9,hw/36)).toFixed(2)})"><path d="M0 0C-9 -7 -14 -2 -9 4C-6 7 -2 3 0 0C2 3 6 7 9 4C14 -2 9 -7 0 0Z" fill="#b3243a"/><circle r="2.6" fill="#7a1424"/></g>`;
+ const minY=cy0-ext-4,vh=coneBot-minY+6;
+ return`<svg viewBox="${(-W).toFixed(1)} ${minY.toFixed(1)} ${(2*W).toFixed(1)} ${vh.toFixed(1)}" class="fl bqc" role="img" aria-label="دسته‌گل">${g}</svg>`}
+function basketSVG(cnt){
+ const arr=[];FRK.forEach(k=>{for(let i=0;i<(cnt[k]||0);i++)arr.push(k)});
+ const slots=[[75,80],[105,80],[135,80],[165,80],[90,56],[120,56],[150,56],[105,32],[135,32],[120,10]];
+ let g=`<path d="M52 92C52 14 188 14 188 92" stroke="url(#gBk)" stroke-width="7" fill="none" stroke-linecap="round"/>`;
+ for(let i=Math.min(arr.length,10)-1;i>=0;i--)g+=fruitSVG(arr[i],slots[i][0],slots[i][1],i<4?15:14);
+ g+=`<path d="M30 96L210 96L190 176Q188 186 176 186L64 186Q52 186 50 176Z" fill="url(#gBk)" stroke="rgba(0,0,0,.35)" stroke-width="1"/>`;
+ for(let y=108;y<186;y+=14)g+=`<path d="M${34+(y-96)*.22} ${y}L${206-(y-96)*.22} ${y}" stroke="rgba(0,0,0,.28)" stroke-width="1.4"/><path d="M${34+(y-96)*.22} ${y+1.6}L${206-(y-96)*.22} ${y+1.6}" stroke="rgba(255,255,255,.12)" stroke-width="1"/>`;
+ for(let x=60;x<=180;x+=20)g+=`<path d="M${x} 98L${x+(x-120)*.18} 184" stroke="rgba(0,0,0,.2)" stroke-width="1.2"/>`;
+ g+=`<rect x="26" y="90" width="188" height="12" rx="6" fill="#7b5230" stroke="rgba(0,0,0,.35)" stroke-width="1"/><rect x="30" y="92" width="180" height="3" rx="1.5" fill="rgba(255,255,255,.2)"/>`;
+ return`<svg viewBox="0 -8 240 208" class="fl bkt" role="img" aria-label="سبد میوه">${g}</svg>`}
+
 /* ---------- views ---------- */
 const NAV=[['plan','برنامه',ICON.plan],['stats','آمار',ICON.stats],['away','دور از گوشی',ICON.away],['remind','یادآور',ICON.bell]];
 const navHTML=()=>NAV.map(n=>`<button class="${S.tab===n[0]?'on':''}" data-a="tab" data-v="${n[0]}" aria-current="${S.tab===n[0]?'page':'false'}">${n[2]}<span>${n[1]}</span></button>`).join('');
 function header(){
- const td=todayIso(),t={plan:'برنامه‌ریزی هفتگی من',stats:'آمار و نمودارها',away:'دور از گوشی',remind:'یادآورها'}[S.tab];let sub=null;
+ const td=todayIso(),t={plan:'فلاور لایف',stats:'آمار و نمودارها',away:'دور از گوشی',remind:'یادآورها'}[S.tab];let sub=null;
  if(S.tab==='plan'||(S.tab==='stats'&&S.seg==='week'))sub=weekLabel(wkStart(S.sel));
  else if(S.tab==='stats'&&S.seg==='month')sub=JM[S.mA.jm-1]+' '+fa(S.mA.jy);
  else if(S.tab==='stats')sub='سال '+fa(S.yA);
  return`<header class="hero"><div><div class="eyebrow">${WD[wdIdx(td)]} ${fmtJY(td)}</div><h1>${t}</h1></div>${sub?`<div class="navrow"><div class="pill"><button class="ibtn" data-a="step" data-v="-1" aria-label="قبلی">${ICON.chev(0)}</button><b>${sub}</b><button class="ibtn" data-a="step" data-v="1" aria-label="بعدی">${ICON.chev(1)}</button></div><button class="btn sm" data-a="today">امروز</button></div>`:''}</header>`}
 const demoBanner=()=>`<div class="demo"><span>حالت نمونه · داده‌ها ذخیره نمی‌شوند</span><button class="btn sm" data-a="demoOff">خروج</button></div>`;
-const foot=()=>`<div class="foot">هر روز یک قدم به نسخه‌ی بهتر خودت نزدیک‌تر شو<small>${S.demo?'حالت نمونه':S.base?'در حساب شما همگام می‌شود':'روی همین دستگاه ذخیره می‌شود'}</small></div>`;
+const foot=()=>`<div class="foot">هر روز یک قدم به نسخه‌ی بهتر خودت نزدیک‌تر شو<small>${S.demo?'حالت نمونه':S.base?'در حساب شما همگام می‌شود':'روی همین دستگاه ذخیره می‌شود'}</small><small>فلاور لایف · نسخه <span dir="ltr">${APP_VER}</span></small></div>`;
 /* plan */
 const taskRow=t=>`<li class="task${t.d?' done':''}"><button class="ck" data-a="tgl" data-v="${esc(t.id)}" role="checkbox" aria-checked="${!!t.d}" aria-label="${esc(t.t)}">${ICON.tick}</button><span class="tt">${esc(t.t)}</span>${t.r?`<span class="rt" dir="ltr">${fa(t.r)}</span>`:''}<button class="ib" data-a="clock" data-v="${esc(t.id)}" aria-label="یادآور">${ICON.clock}</button><button class="ib" data-a="del" data-v="${esc(t.id)}" aria-label="حذف">${ICON.x}</button></li>${S.timeEdit===t.id?`<li class="tedit"><input class="in" type="time" id="tin" value="${esc(t.r||'')}" data-in="time" data-v="${esc(t.id)}" style="flex:none;width:auto;direction:ltr"><button class="btn sm" data-a="timeClr" data-v="${esc(t.id)}">بدون یادآور</button><button class="btn sm" data-a="timeOk">تأیید</button></li>`:''}`;
 function dayPanel(){
@@ -458,18 +592,35 @@ function statYear(){
 const viewStats=()=>`<div class="seg" role="tablist">${[['week','هفته'],['month','ماه'],['year','سال']].map(x=>`<button class="${S.seg===x[0]?'on':''}" data-a="seg" data-v="${x[0]}">${x[1]}</button>`).join('')}</div>`+(S.seg==='week'?statWeek():S.seg==='month'?statMonth():statYear());
 /* away from phone */
 function leftTxt(a){const s=Math.max(0,Math.ceil((a.end-Date.now())/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60);return fa((h?h+':':'')+pad(m)+':'+pad(s%60))}
-function viewAway(){
+function viewGrow(){
  const a=M().meta.get('away'),act=a&&a.end?a:null;let h='';
  if(act){const f=FLW[act.type]||FLW.lily,p=clamp((Date.now()-act.start)/(act.end-act.start),0,1);
-  h+=`<section class="glass live"><div class="eyebrow">${esc(f.name)} · ${dur(f.mins)}</div><div class="fbig" id="alF" data-q="${Math.round(p*100)}">${flowerSVG(act.type,p)}</div><div class="timer" id="alT" dir="ltr">${leftTxt(act)}</div><div class="bar"><i id="alB" style="width:${(p*100).toFixed(1)}%"></i></div><p class="note" style="margin:6px 0 4px">گوشی را کنار بگذار. می‌توانی صفحه را ببندی؛ وقتی برگشتی گل را همین‌جا می‌بینی.</p>${S.giveConfirm?`<div style="display:flex;gap:8px"><button class="btn red sm" data-a="giveup">گل پژمرده شود</button><button class="btn sm" data-a="giveNo">ادامه می‌دهم</button></div>`:`<button class="link" data-a="giveAsk">رها کردن</button>`}</section>`}
+  h+=`<section class="glass live"><div class="eyebrow">${esc(f.name)} · ${dur(f.mins)}</div><div class="fbig" id="alF" data-q="${Math.round(p*100)}">${flowerSVG(act.type,p,act.type==='sakura'&&p>=.98)}</div><div class="timer" id="alT" dir="ltr">${leftTxt(act)}</div><div class="bar"><i id="alB" style="width:${(p*100).toFixed(1)}%"></i></div><p class="note" style="margin:6px 0 4px">گوشی را کنار بگذار. می‌توانی صفحه را ببندی؛ وقتی برگشتی گل را همین‌جا می‌بینی.</p>${S.giveConfirm?`<div style="display:flex;gap:8px"><button class="btn red sm" data-a="giveup">گل پژمرده شود</button><button class="btn sm" data-a="giveNo">ادامه می‌دهم</button></div>`:`<button class="link" data-a="giveAsk">رها کردن</button>`}</section>`}
  else h+=`<section class="glass"><h2>یک گل انتخاب کن <small>هر گل یک مدت دور از گوشی</small></h2><div class="pick">${FKEYS.map(id=>`<button class="pc${S.pick===id?' on':''}" data-a="pick" data-v="${id}" aria-pressed="${S.pick===id}">${flowerSVG(id,1)}<b>${FLW[id].name}</b><span>${dur(FLW[id].mins)}</span></button>`).join('')}</div><div style="display:flex;justify-content:center;margin-top:16px"><button class="btn red" data-a="start">کاشتن · ${dur(FLW[S.pick].mins)}</button></div></section>`;
  const all=[...M().fl.values()].sort((x,y)=>y.end-x.end),grown=all.filter(f=>f.status==='grown'),cnt=id=>grown.filter(f=>f.type===id).length,tot=grown.reduce((s,f)=>s+f.mins,0),td=todayIso(),wk=awayMins(keys7(wkStart(td))).tot;
- h+=`<section class="glass"><h2>باغ من <small>${fa(grown.length)} گل رشد کرده</small></h2><div class="garden">${FKEYS.map(id=>`<div class="gc${cnt(id)?'':' zero'}">${flowerSVG(id,1)}<b>${fa(cnt(id))}</b><span>${FLW[id].name}</span></div>`).join('')}</div></section>`;
+ h+=`<section class="glass"><h2>باغ من <small>${fa(grown.length)} گل رشد کرده</small></h2><div class="garden">${FKEYS.map(id=>`<div class="gc${cnt(id)?'':' zero'}">${flowerSVG(id,1,id==='sakura'&&cnt(id)>0)}${id==='sakura'&&cnt(id)>0?PETALS:''}<b>${fa(cnt(id))}</b><span>${FLW[id].name.replace('درخت ','')}</span></div>`).join('')}</div>${FRK.some(k=>FS()[k])?`<div class="stk">${FRK.filter(k=>FS()[k]).map(k=>`<span>${fa(FS()[k])} ${FR[k].n}</span>`).join('')}</div>`:''}</section>`;
  h+=`<section class="glass">${statRow([[hrs(wk),'ساعت در این هفته'],[hrs(tot),'ساعت در کل'],[fa(all.length-grown.length),'گل پژمرده']])}</section>`;
  const last7=Array.from({length:7},(_,i)=>addD(td,i-6)),ad=awayDaily(last7,k=>WS[wdIdx(k)],22);
  if(ad)h+=`<section class="glass"><h2>هفت روز اخیر <small>ساعت دور از گوشی</small></h2>${ad}</section>`;
  if(all.length)h+=`<section class="glass"><h2>آخرین گل‌ها</h2><ul class="hist">${all.slice(0,6).map(f=>`<li><span${f.status==='wilted'?' class="w"':''}>${esc((FLW[f.type]||{}).name||'گل')}${f.status==='wilted'?' · پژمرده':' · '+dur(f.mins)}</span><span class="w">${fmtJ(f.k)}</span></li>`).join('')}</ul></section>`;
  return h}
+const FS=()=>M().meta.get('fruit')||{};
+const ownN=id=>[...M().fl.values()].filter(f=>f.status==='grown'&&f.type===id).length;
+const sumC=o=>Object.values(o).reduce((a,b)=>a+(b|0),0);
+const stepRow=(ico,name,n,max,room,aS,aA,id)=>`<div class="stp"><span class="ico">${ico}</span><b>${name}</b><div class="ctr"><button data-a="${aS}" data-v="${id}" aria-label="کم کردن"${n?'':' disabled'}>−</button><span>${fa(n)} از ${fa(max)}</span><button data-a="${aA}" data-v="${id}" aria-label="اضافه کردن"${n>=max||room<=0?' disabled':''}>+</button></div></div>`;
+function viewGift(){
+ const bq=S.bq,bk=S.bk,fs=FS(),bn=sumC(bq),kn=sumC(bk),own=SINGLES.filter(id=>ownN(id)>0),gl=(M().meta.get('gifts')||{}).list||[];
+ let h=`<section class="glass"><h2>نام تو <small>اختیاری، در پیام هدیه می‌آید</small></h2><input class="in" id="gname" data-in="gname" maxlength="24" value="${esc(S.gname)}" placeholder="مثلاً آری" autocomplete="off"></section>`;
+ h+=`<section class="glass"><h2>دسته‌گل شخصی <small>تا ${fa(BQ_MAX)} گل، از هر نوع که داری</small></h2>`+
+  (own.length?own.map(id=>stepRow(flowerSVG(id,1),FLW[id].name,bq[id]|0,ownN(id),BQ_MAX-bn,'bqSub','bqAdd',id)).join(''):`<p class="note" style="margin:0">هنوز گلی رشد نداده‌ای. اول یک گل بکار تا بتوانی دسته‌گل بسازی.</p>`)+
+  (own.length?`<div class="gprev">${bqCustomSVG(bq)}</div><div class="gcnt">${fa(bn)} از ${fa(BQ_MAX)} گل</div><div style="display:flex;justify-content:center;margin-top:12px"><button class="btn red"${bn?'':' disabled'} data-a="mkBq">ساخت لینک هدیه</button></div>`:'')+`</section>`;
+ h+=`<section class="glass"><h2>سبد میوه <small>تا ${fa(BK_MAX)} میوه، چند نوع هم می‌شود</small></h2>`+
+  (FRK.some(k=>fs[k])?FRK.filter(k=>fs[k]).map(k=>stepRow(`<svg viewBox="0 0 40 40" class="fl">${fruitSVG(k,20,22,13)}</svg>`,FR[k].n,bk[k]|0,fs[k]|0,BK_MAX-kn,'bkSub','bkAdd',k)).join('')+`<div class="gprev">${basketSVG(bk)}</div><div class="gcnt">${fa(kn)} از ${fa(BK_MAX)} میوه</div><div style="display:flex;justify-content:center;margin-top:12px"><button class="btn red"${kn?'':' disabled'} data-a="mkBk">ساخت لینک هدیه</button></div><p class="note" style="margin:10px 0 0;text-align:center">میوه‌هایی که در سبد بگذاری از انبارت کم می‌شوند.</p>`
+   :`<p class="note" style="margin:0">هنوز میوه‌ای نداری. هر درخت پرتقال، سیب یا گیلاس که کامل شود ${fa(YIELD)} میوه به انبارت می‌دهد.</p>`)+`</section>`;
+ if(gl.length)h+=`<section class="glass"><h2>هدیه‌های ساخته‌شده</h2><ul class="glist">${gl.map((g,i)=>`<li><span>${g.k==='b'?'دسته‌گل':'سبد میوه'} · ${fa(g.n)} ${g.k==='b'?'گل':'میوه'}<small>${fmtJ(g.d)}</small></span><span class="acts"><button class="btn sm" data-a="cp" data-v="${i}">کپی لینک</button><button class="btn sm" data-a="sh" data-v="${i}">ارسال</button></span></li>`).join('')}</ul></section>`;
+ return h}
+function viewAway(){
+ return`<div class="seg" role="tablist" style="grid-template-columns:repeat(2,1fr)">${[['grow','کاشتن'],['gift','هدیه']].map(x=>`<button class="${S.atab===x[0]?'on':''}" data-a="atab" data-v="${x[0]}">${x[1]}</button>`).join('')}</div>`+(S.atab==='gift'?viewGift():viewGrow())}
 /* reminders */
 const RS=()=>(S.rd.meta.get('settings')||{}).remind||[];
 function remRow(r){return`<div class="rem${r.on?'':' off'}"><div class="tm" dir="ltr">${fa(r.time)}</div><div class="mid"><span class="nm">${esc(r.label)}</span><div class="days">${WS.map((w,i)=>`<button class="${r.days&&r.days[i]?'on':''}" data-a="rDay" data-v="${r.id}:${i}" aria-label="${WD[i]}" aria-pressed="${!!(r.days&&r.days[i])}">${w}</button>`).join('')}</div></div><button class="tog" data-a="rTgl" data-v="${r.id}" role="switch" aria-checked="${!!r.on}" aria-label="فعال"><span class="sw${r.on?' on':''}" style="display:block"></span></button><button class="ib" data-a="rDel" data-v="${r.id}" aria-label="حذف">${ICON.x}</button></div>`}
@@ -488,6 +639,7 @@ function render(){
  if(S.refocus){S.refocus=false;const i=$('#newTask');if(i)i.focus()}}
 const isEditing=()=>{const a=document.activeElement;return!!a&&/^(INPUT|TEXTAREA)$/.test(a.tagName)};
 function renderSoft(){if(isEditing()){S.pending=true;return}S.pending=false;render()}
+
 /* ---------- demo data (in memory only) ---------- */
 function makeDemo(){
  let s=20261017;const rnd=()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
@@ -520,13 +672,26 @@ function checkReminders(now){
 /* ---------- away-from-phone sessions ---------- */
 function finishAway(a,status){const grown=status==='grown',end=grown?a.end:Date.now();
  putFlower({id:a.id,type:a.type,start:a.start,end,mins:(FLW[a.type]||FLW.lily).mins,status,k:iso(new Date(end))});
- S.rd.meta.set('away',{});persist('meta','away',{},0)}
+ S.rd.meta.set('away',{});persist('meta','away',{},0);
+ const F=FLW[a.type]||{};if(grown&&F.kind==='tree'&&F.fruit)putMeta('fruit',m=>{m[F.fruit]=(m[F.fruit]|0)+YIELD;return m},true)}
 function updateLive(a){const t=$('#alT');if(!t)return;t.textContent=leftTxt(a);const p=clamp((Date.now()-a.start)/(a.end-a.start),0,1),b=$('#alB');if(b)b.style.width=(p*100).toFixed(1)+'%';
  const f=$('#alF'),q=String(Math.round(p*100));if(f&&f.dataset.q!==q){f.dataset.q=q;f.innerHTML=flowerSVG(a.type,p)}}
 function tick(){
  const now=new Date(),a=S.rd.meta.get('away');
- if(a&&a.end){if(Date.now()>=a.end){const f=FLW[a.type]||FLW.lily;finishAway(a,'grown');notify('گلت کامل شد','«'+f.name+'» · '+dur(f.mins)+' دور از گوشی');renderSoft()}else if(S.tab==='away')updateLive(a)}
+ if(a&&a.end){if(Date.now()>=a.end){const f=FLW[a.type]||FLW.lily;finishAway(a,'grown');notify(f.kind==='tree'?'درختت کامل شد':'گلت کامل شد','«'+f.name+'» · '+dur(f.mins)+' دور از گوشی'+(f.kind==='tree'&&f.fruit?' · '+fa(YIELD)+' '+FR[f.fruit].n+' به انبار اضافه شد':''));renderSoft()}else if(S.tab==='away')updateLive(a)}
  if(now.getSeconds()%15===0)checkReminders(now)}
+/* ---------- gifts ---------- */
+const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const b64d=s=>JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));
+function giftURL(k,name,f){return GIFT_BASE+'?g='+b64e({k,n:name,f})}
+function giftText(k,name){const who=name?'«'+name+'» سعی کرد کمتر گوشی رو برداره و دستاوردش':'ایشون سعی کردن کمتر گوشی رو بردارن و دستاوردشون';return who+' این '+(k==='b'?'دسته‌گل':'سبد میوه')+' بود و برای شما فرستاد :) حمایتش کنید'}
+function readGift(){try{const g=new URLSearchParams(location.search).get('g');if(!g)return null;const o=b64d(g),k=o.k==='k'?'k':'b',keys=k==='b'?SINGLES:FRK,f={};let n=0;
+  keys.forEach(x=>{const c=Math.floor(+(o.f||{})[x]);if(c>0){f[x]=c;n+=c}});const max=k==='b'?BQ_MAX:BK_MAX;
+  if(!n||n>max)return null;return{k,f,n,name:String(o.n||'').slice(0,24)}}catch(e){return null}}
+function showGift(G){document.title=G.k==='b'?'یک دسته‌گل برای شما':'یک سبد میوه برای شما';$('#nav').hidden=true;
+ $('#app').innerHTML=`<div class="gift"><div class="eyebrow">فلاور لایف</div><h1>${G.k==='b'?'یک دسته‌گل برای شما':'یک سبد میوه برای شما'}</h1><div class="gprev">${G.k==='b'?bqCustomSVG(G.f):basketSVG(G.f)}</div><div class="gcnt">${fa(G.n)} ${G.k==='b'?'گل':'میوه'}</div><section class="glass"><p class="msg" style="margin:0">${esc(giftText(G.k,G.name)).replace(':)','<bdi dir="ltr">:)</bdi>')}</p></section><p class="note"><a href="${APP_URL}" target="_blank" rel="noopener">فلاور لایف را بگیر</a> و خودت هم گل بکار.</p></div>`}
+function copyText(t){const fb=()=>{try{const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0;top:0';document.body.appendChild(a);a.select();const ok=document.execCommand('copy');a.remove();return ok}catch(e){return false}};
+ try{if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t).then(()=>true,()=>fb())}catch(e){}return Promise.resolve(fb())}
 /* ---------- actions ---------- */
 const uid=()=>Date.now().toString(36)+Math.floor(Math.random()*999).toString(36);
 function addTask(txt){putDay(S.sel,d=>{d.tasks.push({id:'t'+uid(),t:txt,d:0})},true);S.refocus=true}
@@ -556,6 +721,18 @@ function act(a,v,el){
  case'rTgl':putMeta('settings',m=>{const r=(m.remind||[]).find(r=>r.id===v);if(r)r.on=r.on?0:1;return m});break;
  case'rDay':{const[id,i]=v.split(':');putMeta('settings',m=>{const r=(m.remind||[]).find(r=>r.id===id);if(r){r.days=r.days||[0,0,0,0,0,0,0];r.days[+i]=r.days[+i]?0:1}return m});break}
  case'pick':S.pick=v;render();break;
+ case'atab':S.atab=v;render();break;
+ case'bqAdd':{const o=ownN(v);if((S.bq[v]|0)<o&&sumC(S.bq)<BQ_MAX)S.bq[v]=(S.bq[v]|0)+1;render();break}
+ case'bqSub':if(S.bq[v]>0)S.bq[v]--;render();break;
+ case'bkAdd':{const o=FS()[v]|0;if((S.bk[v]|0)<o&&sumC(S.bk)<BK_MAX)S.bk[v]=(S.bk[v]|0)+1;render();break}
+ case'bkSub':if(S.bk[v]>0)S.bk[v]--;render();break;
+ case'mkBq':case'mkBk':{const isB=a==='mkBq',sel=isB?S.bq:S.bk;if(!sumC(sel))break;const f={};Object.keys(sel).forEach(k=>{if(sel[k]>0)f[k]=sel[k]});
+  const name=(S.gname||'').trim();const url=giftURL(isB?'b':'k',name,f);
+  if(!isB)putMeta('fruit',m=>{Object.keys(f).forEach(k=>{m[k]=Math.max(0,(m[k]|0)-f[k])});return m},true);
+  putMeta('gifts',m=>{m.list=[{k:isB?'b':'k',n:sumC(f),d:todayIso(),u:url}].concat(m.list||[]).slice(0,12);return m},true);
+  if(!isB)S.bk={};copyText(url).then(ok=>toast(ok?'لینک هدیه کپی شد':'لینک ساخته شد','هر کسی که لینک را باز کند هدیه را می‌بیند'));render();break}
+ case'cp':{const g=((S.rd.meta.get('gifts')||{}).list||[])[+v];if(g)copyText(g.u).then(ok=>toast(ok?'لینک کپی شد':'کپی نشد','می‌توانی از دکمه‌ی ارسال استفاده کنی'));break}
+ case'sh':{const g=((S.rd.meta.get('gifts')||{}).list||[])[+v];if(!g)break;const txt=giftText(g.k,'')+'\n'+g.u;if(navigator.share)navigator.share({text:txt}).catch(()=>{});else copyText(g.u).then(()=>toast('لینک کپی شد','در پیام‌رسان بچسبان'));break}
  case'start':{if(S.demo){S.demo=false;toast('از حالت نمونه خارج شدی','گل واقعی در باغ خودت کاشته می‌شود')}const n=Date.now(),f=FLW[S.pick];S.giveConfirm=false;putMeta('away',()=>({id:'f-'+n,type:S.pick,start:n,end:n+f.mins*6e4}));break}
  case'giveAsk':S.giveConfirm=true;render();break;
  case'giveNo':S.giveConfirm=false;render();break;
@@ -570,6 +747,7 @@ document.addEventListener('click',e=>{const el=e.target.closest&&e.target.closes
 document.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.isComposing)return;const m={newTask:'add',newHabit:'habAdd',rLabel:'rAdd'}[e.target.id];if(m){e.preventDefault();act(m)}});
 document.addEventListener('input',e=>{const t=e.target,k=t.dataset&&t.dataset.in;if(!k)return;
  if(k==='note')putDay(S.sel,d=>{d.note=t.value},false,true);
+ if(k==='gname')S.gname=t.value.slice(0,24);
 });
 document.addEventListener('change',e=>{const t=e.target;if(t.id==='imp'&&t.files&&t.files[0]){const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!o||!Array.isArray(o.days))throw 0;S.rd.days=new Map(o.days);S.rd.fl=new Map(o.fl||[]);S.rd.meta=new Map(o.meta||[]);saveLocal();toast('پشتیبان بازیابی شد');render()}catch(err){toast('این فایل پشتیبان معتبر نیست')}};rd.readAsText(t.files[0]);return}if(t.dataset&&t.dataset.in==='time'){const id=t.dataset.v,v=t.value;putDay(S.sel,d=>{const x=d.tasks.find(y=>y.id===id);if(x){if(v)x.r=v;else delete x.r}},true)}});
 document.addEventListener('focusout',()=>{setTimeout(()=>{if(S.pending&&!isEditing())renderSoft()},80)});
@@ -602,7 +780,8 @@ async function init(){
  try{if(window.claude&&claude.use){const r=await Promise.all([claude.use('db'),claude.use('user')]),db=r[0],user=r[1],id=user?await user.id():null;
   if(db&&id){S.base=db.doc('data/users/'+id+'/app');subscribe()}}}catch(e){}
  renderSoft()}
-init();
+{const G=readGift();if(G)showGift(G);else init()}
+
 
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}})}
 </script>

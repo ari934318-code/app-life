@@ -214,6 +214,7 @@ textarea.in{resize:vertical;min-height:72px;width:100%;display:block}
 .gift .gprev{position:relative}
 .gift a{color:var(--red-hi)}
 .ask{margin-top:12px;padding:12px;border:1px solid rgba(240,96,109,.4);border-radius:16px;background:rgba(201,40,60,.1)} .ask p{margin:0 0 10px;font-size:13.5px;line-height:1.9;color:var(--ink2);text-align:center}
+.task.mv .tt{flex:1}.task.mv .ib:disabled{opacity:.25}.task.mv .ib{font-size:18px;line-height:1;color:var(--ink)}
 </style>
 </head><body>
 <div class="bg" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i></div>
@@ -303,7 +304,7 @@ const FLW={
 };
 const FKEYS=Object.keys(FLW);
 const SINGLES=FKEYS.filter(k=>FLW[k].kind==='single');
-const APP_VER='1.5.0',YIELD=5,BQ_MAX=30,BK_MAX=10;
+const APP_VER='1.5.1',YIELD=5,BQ_MAX=30,BK_MAX=10;
 const FR={orange:{n:'پرتقال',c:'#f08a24',h:'#ffc46b'},apple:{n:'سیب',c:'#c9283c',h:'#f26a78'},cherry:{n:'گیلاس',c:'#8e1230',h:'#d6455e'}};
 const FRK=Object.keys(FR);
 const GIFT_BASE='https://deploy-static-site-54a7b7.netlify.app/';
@@ -311,7 +312,7 @@ const REL_URL='https://github.com/ari934318-code/app-life/releases/latest',UPD_A
 /* ---------- state ---------- */
 const tj=jOf(todayIso());
 const S={tab:'plan',seg:'week',sel:todayIso(),mA:{jy:tj.jy,jm:tj.jm},yA:tj.jy,demo:false,dd:null,base:null,
- rd:{days:new Map(),fl:new Map(),meta:new Map()},timeEdit:null,pick:'lily',atab:'grow',bq:{},bk:{},gname:'',nat:{perm:'',exact:''},ask:null,upd:null,giveConfirm:false,pending:false,refocus:false,dirty:new Set(),sig:{},migrated:false,hint:true,notif:false};
+ rd:{days:new Map(),fl:new Map(),meta:new Map()},timeEdit:null,pick:'lily',atab:'grow',bq:{},bk:{},gname:'',bkShow:'',nat:{perm:'',exact:'',err:''},reorder:false,ask:null,upd:null,giveConfirm:false,pending:false,refocus:false,dirty:new Set(),sig:{},migrated:false,hint:true,notif:false};
 const M=()=>S.demo?S.dd:S.rd;
 const getDay=k=>M().days.get(k);
 const tasksOf=k=>{const d=getDay(k);return d&&Array.isArray(d.tasks)?d.tasks:null};
@@ -521,13 +522,13 @@ function header(){
 const demoBanner=()=>`<div class="demo"><span>حالت نمونه · داده‌ها ذخیره نمی‌شوند</span><button class="btn sm" data-a="demoOff">خروج</button></div>`;
 const foot=()=>`<div class="foot">هر روز یک قدم به نسخه‌ی بهتر خودت نزدیک‌تر شو<small>${S.demo?'حالت نمونه':S.base?'در حساب شما همگام می‌شود':'روی همین دستگاه ذخیره می‌شود'}</small><small>فلاور لایف · نسخه <span dir="ltr">${APP_VER}</span></small></div>`;
 /* plan */
-const taskRow=t=>`<li class="task${t.d?' done':''}"><button class="ck" data-a="tgl" data-v="${esc(t.id)}" role="checkbox" aria-checked="${!!t.d}" aria-label="${esc(t.t)}">${ICON.tick}</button><span class="tt">${esc(t.t)}</span>${t.r?`<span class="rt" dir="ltr">${fa(t.r)}</span>`:''}<button class="ib" data-a="clock" data-v="${esc(t.id)}" aria-label="یادآور">${ICON.clock}</button><button class="ib" data-a="del" data-v="${esc(t.id)}" aria-label="حذف">${ICON.x}</button></li>${S.timeEdit===t.id?`<li class="tedit"><input class="in" type="time" id="tin" value="${esc(t.r||'')}" data-in="time" data-v="${esc(t.id)}" style="flex:none;width:auto;direction:ltr"><button class="btn sm" data-a="timeClr" data-v="${esc(t.id)}">بدون یادآور</button><button class="btn sm" data-a="timeOk">تأیید</button></li>`:''}`;
+const taskRow=(t,i,arr)=>S.reorder?`<li class="task mv"><span class="tt">${esc(t.t)}</span><button class="ib" data-a="mvUp" data-v="${esc(t.id)}" aria-label="بالا"${i===0?' disabled':''}>↑</button><button class="ib" data-a="mvDn" data-v="${esc(t.id)}" aria-label="پایین"${i===arr.length-1?' disabled':''}>↓</button></li>`:`<li class="task${t.d?' done':''}"><button class="ck" data-a="tgl" data-v="${esc(t.id)}" role="checkbox" aria-checked="${!!t.d}" aria-label="${esc(t.t)}">${ICON.tick}</button><span class="tt">${esc(t.t)}</span>${t.r?`<span class="rt" dir="ltr">${fa(t.r)}</span>`:''}<button class="ib" data-a="clock" data-v="${esc(t.id)}" aria-label="یادآور">${ICON.clock}</button><button class="ib" data-a="del" data-v="${esc(t.id)}" aria-label="حذف">${ICON.x}</button></li>${S.timeEdit===t.id?`<li class="tedit"><input class="in" type="time" id="tin" value="${esc(t.r||'')}" data-in="time" data-v="${esc(t.id)}" style="flex:none;width:auto;direction:ltr"><button class="btn sm" data-a="timeClr" data-v="${esc(t.id)}">بدون یادآور</button><button class="btn sm" data-a="timeOk">تأیید</button></li>`:''}`;
 function dayPanel(){
  const k=S.sel,d=getDay(k)||{},tasks=dispTasks(k),[a,b]=dayCnt(k);
  let h=`<section class="glass dp"><div class="dh"><b>${WD[wdIdx(k)]} · ${fmtJ(k)}</b><span>${b?fa(a)+' از '+fa(b)+' انجام شد':''}</span></div>`;
  h+=`<div><span class="lbl">حال امروز</span><div class="moods">${MOODS.map(m=>`<button class="mood${d.mood===m[0]?' on':''}" data-a="mood" data-v="${m[0]}" aria-label="${m[1]}" aria-pressed="${d.mood===m[0]}" data-tip="${m[1]}">${m[0]}</button>`).join('')}</div></div>`;
  h+=`<button class="pt${d.period?' on':''}" data-a="period" aria-pressed="${!!d.period}">${ICON.drop}<span>روز پریود</span><i class="sw"></i></button>`;
- h+=`<div><span class="lbl">وظایف</span>${tasks.length?`<ul class="tasks">${tasks.map(taskRow).join('')}</ul>`:'<div class="empty">هنوز وظیفه‌ای برای این روز نیست</div>'}<div class="add"><input class="in" id="newTask" placeholder="وظیفه‌ی تازه…" maxlength="120" autocomplete="off"><button class="btn red" data-a="add">افزودن</button></div>`;
+ h+=`<div><div style="display:flex;align-items:center;justify-content:space-between"><span class="lbl">وظایف</span>${tasks.length>1?`<button class="btn sm" data-a="rord">${S.reorder?'پایان ترتیب':'ترتیب'}</button>`:''}</div>${tasks.length?`<ul class="tasks">${tasks.map(taskRow).join('')}</ul>`:'<div class="empty">هنوز وظیفه‌ای برای این روز نیست</div>'}<div class="add"><input class="in" id="newTask" placeholder="وظیفه‌ی تازه…" maxlength="120" autocomplete="off"><button class="btn red" data-a="add">افزودن</button></div>`;
  if(!tasks.length)h+=`<div class="chips">${['نوشیدن آب','ورزش','مطالعه','خواب زود'].map(c=>`<button class="chip" data-a="chip" data-v="${c}">${c}</button>`).join('')}</div>`;
  const prev=tasksOf(addD(k,-1))||[],have=new Set(tasks.map(x=>x.t)),carry=prev.filter(x=>!x.d&&!have.has(x.t));
  if(carry.length)h+=`<button class="link" data-a="carry">آوردن ${fa(carry.length)} وظیفه‌ی ناتمام از دیروز</button>`;
@@ -614,7 +615,7 @@ const askBox=(k,n)=>`<div class="ask"><p>اگر لینک را بسازی، ${k==
 function viewGift(){
  if(!S.gname&&GSET().gname)S.gname=GSET().gname;
  const bq=S.bq,bk=S.bk,fs=FS(),bn=sumC(bq),kn=sumC(bk),own=SINGLES.filter(id=>ownN(id)>0),gl=(M().meta.get('gifts')||{}).list||[];
- let h=`<section class="glass"><h2>نام تو <small>اختیاری، در پیام هدیه می‌آید</small></h2><input class="in" id="gname" data-in="gname" maxlength="24" value="${esc(S.gname)}" placeholder="مثلاً آری" autocomplete="off"></section>`;
+ let h=`<section class="glass"><h2>نام تو <small>اختیاری، در پیام هدیه می‌آید</small></h2><input class="in" id="gname" data-in="gname" maxlength="24" value="${esc(S.gname)}" placeholder="مثلاً سارا" autocomplete="off"></section>`;
  h+=`<section class="glass"><h2>دسته‌گل شخصی <small>تا ${fa(BQ_MAX)} گل، از هر نوع که داری</small></h2>`+
   (own.length?own.map(id=>stepRow(flowerSVG(id,1),FLW[id].name,bq[id]|0,ownN(id),BQ_MAX-bn,'bqSub','bqAdd',id)).join(''):`<p class="note" style="margin:0">هنوز گلی رشد نداده‌ای. اول یک گل بکار تا بتوانی دسته‌گل بسازی.</p>`)+
   (own.length?`<div class="gprev">${bqCustomSVG(bq)}</div><div class="gcnt">${fa(bn)} از ${fa(BQ_MAX)} گل</div>${S.ask==='b'?askBox('b',bn):`<div style="display:flex;justify-content:center;margin-top:12px"><button class="btn red"${bn?'':' disabled'} data-a="mkBq">ساخت لینک هدیه</button></div>`}`:'')+`</section>`;
@@ -622,7 +623,6 @@ function viewGift(){
   (FRK.some(k=>fs[k])?FRK.filter(k=>fs[k]).map(k=>stepRow(`<svg viewBox="0 0 40 40" class="fl">${fruitSVG(k,20,22,13)}</svg>`,FR[k].n,bk[k]|0,fs[k]|0,BK_MAX-kn,'bkSub','bkAdd',k)).join('')+`<div class="gprev">${basketSVG(bk)}</div><div class="gcnt">${fa(kn)} از ${fa(BK_MAX)} میوه</div>${S.ask==='k'?askBox('k',kn):`<div style="display:flex;justify-content:center;margin-top:12px"><button class="btn red"${kn?'':' disabled'} data-a="mkBk">ساخت لینک هدیه</button></div><p class="note" style="margin:10px 0 0;text-align:center">میوه‌هایی که در سبد بگذاری از انبارت کم می‌شوند.</p>`}`
    :`<p class="note" style="margin:0">هنوز میوه‌ای نداری. هر درخت پرتقال، سیب یا گیلاس که کامل شود ${fa(YIELD)} میوه به انبارت می‌دهد.</p>`)+`</section>`;
  if(gl.length)h+=`<section class="glass"><h2>هدیه‌های ساخته‌شده</h2><ul class="glist">${gl.map((g,i)=>`<li><span>${g.k==='b'?'دسته‌گل':'سبد میوه'} · ${fa(g.n)} ${g.k==='b'?'گل':'میوه'}<small>${fmtJ(g.d)}</small></span><span class="acts"><button class="btn sm" data-a="cp" data-v="${i}">کپی لینک</button><button class="btn sm" data-a="sh" data-v="${i}">ارسال</button></span></li>`).join('')}</ul></section>`;
- h+=`<section class="glass"><h2>آدرس لینک هدیه <small>اختیاری</small></h2><input class="in" id="gbase" data-in="gbase" dir="ltr" inputmode="url" value="${esc(GSET().giftBase||'')}" placeholder="https://example.netlify.app" autocomplete="off"><p class="note" style="margin:8px 0 0">لینک‌ها با آدرس flowerlife.netlify.app ساخته می‌شوند. فقط اگر آدرس سایتت عوض شد اینجا بنویس. خالی بماند، همان پیش‌فرض استفاده می‌شود.</p></section>`;
  return h}
 function viewAway(){
  return`<div class="seg" role="tablist" style="grid-template-columns:repeat(2,1fr)">${[['grow','کاشتن'],['gift','هدیه']].map(x=>`<button class="${S.atab===x[0]?'on':''}" data-a="atab" data-v="${x[0]}">${x[1]}</button>`).join('')}</div>`+(S.atab==='gift'?viewGift():viewGrow())}
@@ -634,8 +634,8 @@ function viewRemind(){
  const rs=RS(),td=todayIso(),timed=(S.rd.days.get(td)&&S.rd.days.get(td).tasks||[]).filter(t=>t.r).sort((a,b)=>a.r<b.r?-1:1);
  let h=`<section class="glass"><h2>یادآورهای روزانه</h2>${rs.length?rs.map(remRow).join(''):'<div class="empty">هنوز یادآوری نساخته‌ای</div>'}<div class="add"><input class="in" id="rLabel" placeholder="متن یادآور" maxlength="60"><input class="in" type="time" id="rTime" value="08:00" style="flex:none;width:auto;direction:ltr"><button class="btn red" data-a="rAdd">افزودن</button></div><div class="chips">${SUGG.map((s,i)=>`<button class="chip" data-a="rChip" data-v="${i}">${s[0]} · ${fa(s[1])}</button>`).join('')}</div></section>`;
  h+=`<section class="glass"><h2>یادآور وظایف امروز <small>از ساعتی که روی هر وظیفه می‌گذاری</small></h2>${timed.length?`<ul class="hist">${timed.map(t=>`<li><span${t.d?' class="w"':''}>${esc(t.t)}</span><span class="w" dir="ltr">${fa(t.r)}</span></li>`).join('')}</ul>`:'<div class="empty">وظیفه‌ای با ساعت یادآور نداری. در برگه‌ی برنامه، روی ساعت کنار هر وظیفه بزن.</div>'}</section>`;
- h+=NAT?`<section class="glass"><h2>اعلان روی گوشی</h2><p class="note" style="margin:0 0 12px">${S.nat.perm==='granted'?'اعلان‌ها فعال‌اند. یادآورها سر ساعت و پایان رشد گل، حتی وقتی اپ بسته است، اعلان می‌دهند. هنگام کاشتن گل یا درخت هم شمارش معکوس بالای صفحه‌ی گوشی نشان داده می‌شود.':'برای اینکه یادآورها و شمارش معکوس گل روی گوشی بیایند، اجازه‌ی اعلان لازم است.'}</p><div style="display:flex;gap:8px;flex-wrap:wrap">${S.nat.perm!=='granted'?'<button class="btn red" data-a="natOn">فعال‌سازی اعلان</button>':''}<button class="btn" data-a="natTest">اعلان آزمایشی</button></div>${S.nat.exact==='denied'?'<p class="note" style="margin:12px 0 8px">برای اینکه اعلان‌ها سر ساعت دقیق بیایند، اجازه‌ی «زنگ و یادآور» را هم روشن کن.</p><button class="btn" data-a="natExact">تنظیم زنگ دقیق</button>':''}</section>`:`<section class="glass"><h2>اعلان روی گوشی</h2><p class="note" style="margin:0 0 12px">اعلان واقعی گوشی فقط در اپ نصب‌شده‌ی فلاور لایف کار می‌کند. در این نمایش، یادآورها وقتی صفحه باز است با پیام و صدا نشان داده می‌شوند.</p>${typeof Notification!=='undefined'&&Notification.permission!=='granted'?`<button class="btn" data-a="notif">فعال‌سازی اعلان مرورگر</button>`:''}</section>`;
- if(STANDALONE)h+=`<section class="glass"><h2>پشتیبان‌گیری <small>داده‌ها فقط روی این گوشی‌اند</small></h2><p class="note" style="margin:0 0 12px">اگر اطلاعات مرورگر پاک شود، داده‌ها هم می‌روند. هر چند وقت یک بار فایل پشتیبان بگیر. بازیابی، داده‌های فعلی را با محتوای فایل عوض می‌کند.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-a="export">گرفتن فایل پشتیبان</button><label class="btn" style="cursor:pointer">بازیابی از فایل<input type="file" id="imp" accept="application/json,.json" hidden></label></div></section>`;
+ h+=NAT?`<section class="glass"><h2>اعلان روی گوشی</h2><p class="note" style="margin:0 0 12px">${S.nat.perm==='granted'?'اعلان‌ها فعال‌اند. یادآورها سر ساعت و پایان رشد گل، حتی وقتی اپ بسته است، اعلان می‌دهند. هنگام کاشتن گل یا درخت هم شمارش معکوس بالای صفحه‌ی گوشی نشان داده می‌شود.':'برای اینکه یادآورها و شمارش معکوس گل روی گوشی بیایند، اجازه‌ی اعلان لازم است.'}</p><div style="display:flex;gap:8px;flex-wrap:wrap">${S.nat.perm!=='granted'?'<button class="btn red" data-a="natOn">فعال‌سازی اعلان</button>':''}<button class="btn" data-a="natTest">اعلان آزمایشی</button></div>${S.nat.err?`<p class="note" style="margin:12px 0 0;color:var(--red-hi)" dir="ltr">${esc(S.nat.err)}</p>`:''}${S.nat.exact==='denied'?'<p class="note" style="margin:12px 0 8px">برای اینکه اعلان‌ها سر ساعت دقیق بیایند، اجازه‌ی «زنگ و یادآور» را هم روشن کن.</p><button class="btn" data-a="natExact">تنظیم زنگ دقیق</button>':''}</section>`:`<section class="glass"><h2>اعلان روی گوشی</h2><p class="note" style="margin:0 0 12px">اعلان واقعی گوشی فقط در اپ نصب‌شده‌ی فلاور لایف کار می‌کند. در این نمایش، یادآورها وقتی صفحه باز است با پیام و صدا نشان داده می‌شوند.</p>${typeof Notification!=='undefined'&&Notification.permission!=='granted'?`<button class="btn" data-a="notif">فعال‌سازی اعلان مرورگر</button>`:''}</section>`;
+ if(STANDALONE)h+=`<section class="glass"><h2>پشتیبان‌گیری <small>داده‌ها فقط روی این گوشی‌اند</small></h2><p class="note" style="margin:0 0 12px">اگر اطلاعات مرورگر پاک شود، داده‌ها هم می‌روند. هر چند وقت یک بار فایل پشتیبان بگیر. بازیابی، داده‌های فعلی را با محتوای فایل عوض می‌کند.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn red" data-a="expCopy">کپی پشتیبان (پیشنهادی)</button><button class="btn" data-a="export">گرفتن فایل</button><label class="btn" style="cursor:pointer">بازیابی از فایل<input type="file" id="imp" accept="application/json,.json" hidden></label></div>${S.bkShow?`<p class="note" style="margin:12px 0 6px">کپی خودکار نشد. این متن را نگه دار، همه را انتخاب و کپی کن:</p><textarea class="in" readonly rows="4" dir="ltr" onfocus="this.select()" style="width:100%">${esc(S.bkShow)}</textarea>`:''}<p class="note" style="margin:14px 0 6px">بازیابی از متن: پشتیبان کپی‌شده را اینجا بچسبان.</p><textarea class="in" id="impTxt" rows="3" dir="ltr" placeholder="متن پشتیبان" style="width:100%"></textarea><div style="margin-top:8px"><button class="btn" data-a="impTxt">بازیابی از متن</button></div></section>`;
  return h}
 function render(){
  const view={plan:viewPlan,stats:viewStats,away:viewAway,remind:viewRemind}[S.tab]();
@@ -689,8 +689,8 @@ function tick(){
 /* ---------- native phone notifications (Android app only) ---------- */
 const NAT=(()=>{try{return window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()?{LN:Capacitor.registerPlugin('LocalNotifications'),CD:Capacitor.registerPlugin('Countdown')}:null}catch(e){return null}})();
 const nid=s=>{let h=7;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%2000000000;return h+1000};
-async function natPerms(ask){if(!NAT)return;try{let p=await NAT.LN.checkPermissions();if(p.display!=='granted'&&ask)p=await NAT.LN.requestPermissions();S.nat.perm=p.display;
-  try{const e=await NAT.LN.checkExactNotificationSetting();S.nat.exact=e.exact_alarm}catch(x){S.nat.exact='granted'}}catch(e){}}
+async function natPerms(ask){if(!NAT)return;S.nat.err='';try{let p=await NAT.LN.checkPermissions();if(p.display!=='granted'&&ask)p=await NAT.LN.requestPermissions();S.nat.perm=p.display;
+  try{const e=await NAT.LN.checkExactNotificationSetting();S.nat.exact=e.exact_alarm}catch(x){S.nat.exact='granted'}}catch(e){S.nat.err=String(e&&e.message||e)}}
 function natPlan(){const out=[],now=Date.now();
  RS().forEach(r=>{if(!r.on||!r.time)return;const[hh,mm]=r.time.split(':').map(Number);(r.days||[]).forEach((on,i)=>{if(!on)return;
   out.push({id:nid('r'+r.id+':'+i),title:r.label||'یادآور',body:'یادآور '+fa(r.time),channelId:'reminders',schedule:{on:{weekday:((i+6)%7)+1,hour:hh,minute:mm},allowWhileIdle:true}})})});
@@ -710,12 +710,15 @@ function natSync(){if(!NAT)return;clearTimeout(natTimer);natTimer=setTimeout(asy
   const pd=await NAT.LN.getPending();if(pd.notifications&&pd.notifications.length)await NAT.LN.cancel({notifications:pd.notifications.map(n=>({id:n.id}))});
   if(plan.length)await NAT.LN.schedule({notifications:plan});
   if(live){const f=FLW[a.type]||FLW.lily;await NAT.CD.start({end:a.end,title:'دور از گوشی · '+f.name,text:'زمان باقی‌مانده تا کامل شدن'})}else await NAT.CD.stop();
-  natSig=sig}catch(e){}
+  natSig=sig}catch(e){S.nat.err=String(e&&e.message||e);if(S.tab==='remind')renderSoft()}
  natBusy=false},1200)}
+/* ---------- backup ---------- */
+const backupText=()=>JSON.stringify({v:1,days:[...S.rd.days],fl:[...S.rd.fl],meta:[...S.rd.meta]});
+function restoreBackup(text){try{const o=JSON.parse(String(text).trim());if(!o||!Array.isArray(o.days))throw 0;S.rd.days=new Map(o.days);S.rd.fl=new Map(o.fl||[]);S.rd.meta=new Map(o.meta||[]);saveLocal();S.bkShow='';toast('پشتیبان بازیابی شد');render();return true}catch(err){toast('این پشتیبان معتبر نیست','متن را کامل و بدون تغییر بچسبان');return false}}
 /* ---------- gifts ---------- */
 const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 const b64d=s=>JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));
-function giftURL(k,name,f){let b=String(GSET().giftBase||'').trim();if(!/^https?:\/\//.test(b))b=GIFT_BASE;b=b.replace(/[?#].*$/,'');if(!/\/$/.test(b)&&!/\.html?$/.test(b))b+='/';return b+'?g='+b64e({k,n:name,f})}
+function giftURL(k,name,f){return GIFT_BASE+'?g='+b64e({k,n:name,f})}
 function giftText(k,name){const who=name?'«'+name+'» سعی کرد کمتر گوشی رو برداره و دستاوردش':'ایشون سعی کردن کمتر گوشی رو بردارن و دستاوردشون';return who+' این '+(k==='b'?'دسته‌گل':'سبد میوه')+' بود و برای شما فرستاد :) حمایتش کنید'}
 function readGift(){try{const g=new URLSearchParams(location.search).get('g');if(!g)return null;const o=b64d(g),k=o.k==='k'?'k':'b',keys=k==='b'?SINGLES:FRK,f={};let n=0;
   keys.forEach(x=>{const c=Math.floor(+(o.f||{})[x]);if(c>0){f[x]=c;n+=c}});const max=k==='b'?BQ_MAX:BK_MAX;
@@ -738,6 +741,8 @@ function act(a,v,el){
  case'mood':putDay(S.sel,d=>{d.mood=d.mood===v?'':v});break;
  case'period':putDay(S.sel,d=>{d.period=!d.period});break;
  case'tgl':putDay(S.sel,d=>{const t=d.tasks.find(x=>x.id===v);if(t)t.d=t.d?0:1},true);break;
+ case'rord':S.reorder=!S.reorder;render();break;
+ case'mvUp':case'mvDn':putDay(S.sel,d=>{const i=d.tasks.findIndex(x=>x.id===v),j=i+(a==='mvUp'?-1:1);if(i>=0&&j>=0&&j<d.tasks.length){const t=d.tasks[i];d.tasks[i]=d.tasks[j];d.tasks[j]=t}},true);break;
  case'del':putDay(S.sel,d=>{d.tasks=d.tasks.filter(x=>x.id!==v)},true);break;
  case'clock':S.timeEdit=S.timeEdit===v?null:v;render();break;
  case'timeClr':putDay(S.sel,d=>{const t=d.tasks.find(x=>x.id===v);if(t)delete t.r},true);S.timeEdit=null;render();break;
@@ -774,8 +779,10 @@ function act(a,v,el){
  case'giveup':{const a=S.rd.meta.get('away');S.giveConfirm=false;if(a&&a.end)finishAway(a,'wilted');render();break}
  case'demo':S.dd=makeDemo();S.demo=true;render();break;
  case'demoOff':S.demo=false;render();break;
+ case'expCopy':{const t=backupText();copyText(t).then(ok=>{if(ok){S.bkShow='';toast('پشتیبان کپی شد','آن را در یادداشت یا «پیام‌های ذخیره‌شده» بچسبان و نگه دار')}else{S.bkShow=t;render()}});break}
+ case'impTxt':{const el=$('#impTxt');if(el&&el.value.trim())restoreBackup(el.value);else toast('اول متن پشتیبان را بچسبان');break}
  case'export':{try{const bl=new Blob([JSON.stringify({v:1,days:[...S.rd.days],fl:[...S.rd.fl],meta:[...S.rd.meta]})],{type:'application/json'}),u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='planner-backup-'+todayIso()+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('فایل پشتیبان ساخته شد','در پوشه‌ی دانلودها')}catch(e){toast('گرفتن پشتیبان ممکن نشد')}break}
- case'natOn':natPerms(true).then(()=>{render()});break;
+ case'natOn':natPerms(true).then(()=>{if(S.nat.err)toast('اعلان فعال نشد',S.nat.err);render()});break;
  case'natExact':try{NAT.LN.changeExactNotificationSetting().then(()=>natPerms(false)).then(()=>render())}catch(e){}break;
  case'natTest':try{NAT.LN.schedule({notifications:[{id:9002,title:'اعلان آزمایشی',body:'اگر این را می‌بینی اعلان‌ها درست کار می‌کنند',channelId:'reminders',schedule:{at:new Date(Date.now()+5000),allowWhileIdle:true}}]});toast('اعلان آزمایشی','تا چند ثانیه‌ی دیگر می‌آید. می‌توانی اپ را ببندی.')}catch(e){}break;
  case'notif':try{Notification.requestPermission().then(p=>{toast(p==='granted'?'اعلان مرورگر فعال شد':'اعلان مرورگر اجازه نگرفت');render()})}catch(e){toast('اعلان مرورگر در این نمایش پشتیبانی نمی‌شود')}break;
@@ -786,9 +793,9 @@ document.addEventListener('keydown',e=>{if(e.key!=='Enter'||e.isComposing)return
 document.addEventListener('input',e=>{const t=e.target,k=t.dataset&&t.dataset.in;if(!k)return;
  if(k==='note')putDay(S.sel,d=>{d.note=t.value},false,true);
  if(k==='gname'){S.gname=t.value.slice(0,24);putMeta('settings',m=>{m.gname=S.gname;return m},true)}
- if(k==='gbase')putMeta('settings',m=>{m.giftBase=t.value.trim().slice(0,200);return m},true);
+
 });
-document.addEventListener('change',e=>{const t=e.target;if(t.id==='imp'&&t.files&&t.files[0]){const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);if(!o||!Array.isArray(o.days))throw 0;S.rd.days=new Map(o.days);S.rd.fl=new Map(o.fl||[]);S.rd.meta=new Map(o.meta||[]);saveLocal();toast('پشتیبان بازیابی شد');render()}catch(err){toast('این فایل پشتیبان معتبر نیست')}};rd.readAsText(t.files[0]);return}if(t.dataset&&t.dataset.in==='time'){const id=t.dataset.v,v=t.value;putDay(S.sel,d=>{const x=d.tasks.find(y=>y.id===id);if(x){if(v)x.r=v;else delete x.r}},true)}});
+document.addEventListener('change',e=>{const t=e.target;if(t.id==='imp'&&t.files&&t.files[0]){const rd=new FileReader();rd.onload=()=>restoreBackup(rd.result);rd.readAsText(t.files[0]);return}if(t.dataset&&t.dataset.in==='time'){const id=t.dataset.v,v=t.value;putDay(S.sel,d=>{const x=d.tasks.find(y=>y.id===id);if(x){if(v)x.r=v;else delete x.r}},true)}});
 document.addEventListener('focusout',()=>{setTimeout(()=>{if(S.pending&&!isEditing())renderSoft()},80)});
 /* tooltip */
 const tipEl=$('#tip');let tipT;

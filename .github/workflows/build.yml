@@ -27,9 +27,22 @@ jobs:
           mkdir -p www
           cp index.html manifest.webmanifest sw.js icon-192.png icon-512.png icon-maskable-512.png www/
 
-      - run: npm i @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+      - run: npm i @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7 @capacitor/local-notifications@7
 
       - run: npx cap add android && npx cap sync android
+
+      - name: Add native notification code
+        run: |
+          set -e
+          JAVA_DIR="android/app/src/main/java/com/ari/planner"
+          mkdir -p "$JAVA_DIR"
+          SRC="."
+          if [ -f native/CountdownPlugin.java ]; then SRC="native"; fi
+          cp "$SRC/CountdownPlugin.java" "$JAVA_DIR/CountdownPlugin.java"
+          cp "$SRC/MainActivity.java" "$JAVA_DIR/MainActivity.java"
+          sed -i '0,/<application/s//<uses-permission android:name="android.permission.POST_NOTIFICATIONS" \/>\n    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" \/>\n    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" \/>\n    <application/' android/app/src/main/AndroidManifest.xml
+          grep -n "uses-permission\|<application" android/app/src/main/AndroidManifest.xml
+          ls "$JAVA_DIR"
 
       - name: Set Android app icon
         run: |
@@ -56,18 +69,25 @@ jobs:
 
           rm -rf "$RES/mipmap-anydpi-v26"
 
+      - name: Use fixed signing key
+        run: |
+          mkdir -p ~/.android
+          cp debug.keystore ~/.android/debug.keystore
+
       - name: Set version
         run: |
           V=$(cat VERSION)
           echo "V=$V" >> $GITHUB_ENV
-          CODE=$(git rev-list --count HEAD)
+          IFS=. read -r MA MI PA <<< "$V"
+          CODE=$((MA * 10000 + MI * 100 + PA))
           sed -i "s/versionCode 1/versionCode $CODE/; s/versionName \"1.0\"/versionName \"$V\"/" android/app/build.gradle
+          grep -n "versionCode\|versionName" android/app/build.gradle
 
       - run: cd android && ./gradlew assembleDebug
 
-      - run: cp android/app/build/outputs/apk/debug/app-debug.apk planner-v$V.apk
+      - run: cp android/app/build/outputs/apk/debug/app-debug.apk flowerlife-v$V.apk
 
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.V }}
-          files: planner-v*.apk
+          files: flowerlife-v*.apk

@@ -303,15 +303,15 @@ const FLW={
 };
 const FKEYS=Object.keys(FLW);
 const SINGLES=FKEYS.filter(k=>FLW[k].kind==='single');
-const APP_VER='1.4.0',YIELD=5,BQ_MAX=30,BK_MAX=10;
+const APP_VER='1.5.0',YIELD=5,BQ_MAX=30,BK_MAX=10;
 const FR={orange:{n:'پرتقال',c:'#f08a24',h:'#ffc46b'},apple:{n:'سیب',c:'#c9283c',h:'#f26a78'},cherry:{n:'گیلاس',c:'#8e1230',h:'#d6455e'}};
 const FRK=Object.keys(FR);
-const GIFT_BASE=/github\.io$/.test(location.hostname)?location.origin+location.pathname:'https://ari934318-code.github.io/app-life/';
+const GIFT_BASE='https://deploy-static-site-54a7b7.netlify.app/';
 const REL_URL='https://github.com/ari934318-code/app-life/releases/latest',UPD_API='https://api.github.com/repos/ari934318-code/app-life/releases/latest';
 /* ---------- state ---------- */
 const tj=jOf(todayIso());
 const S={tab:'plan',seg:'week',sel:todayIso(),mA:{jy:tj.jy,jm:tj.jm},yA:tj.jy,demo:false,dd:null,base:null,
- rd:{days:new Map(),fl:new Map(),meta:new Map()},timeEdit:null,pick:'lily',atab:'grow',bq:{},bk:{},gname:'',ask:null,upd:null,giveConfirm:false,pending:false,refocus:false,dirty:new Set(),sig:{},migrated:false,hint:true,notif:false};
+ rd:{days:new Map(),fl:new Map(),meta:new Map()},timeEdit:null,pick:'lily',atab:'grow',bq:{},bk:{},gname:'',nat:{perm:'',exact:''},ask:null,upd:null,giveConfirm:false,pending:false,refocus:false,dirty:new Set(),sig:{},migrated:false,hint:true,notif:false};
 const M=()=>S.demo?S.dd:S.rd;
 const getDay=k=>M().days.get(k);
 const tasksOf=k=>{const d=getDay(k);return d&&Array.isArray(d.tasks)?d.tasks:null};
@@ -622,7 +622,7 @@ function viewGift(){
   (FRK.some(k=>fs[k])?FRK.filter(k=>fs[k]).map(k=>stepRow(`<svg viewBox="0 0 40 40" class="fl">${fruitSVG(k,20,22,13)}</svg>`,FR[k].n,bk[k]|0,fs[k]|0,BK_MAX-kn,'bkSub','bkAdd',k)).join('')+`<div class="gprev">${basketSVG(bk)}</div><div class="gcnt">${fa(kn)} از ${fa(BK_MAX)} میوه</div>${S.ask==='k'?askBox('k',kn):`<div style="display:flex;justify-content:center;margin-top:12px"><button class="btn red"${kn?'':' disabled'} data-a="mkBk">ساخت لینک هدیه</button></div><p class="note" style="margin:10px 0 0;text-align:center">میوه‌هایی که در سبد بگذاری از انبارت کم می‌شوند.</p>`}`
    :`<p class="note" style="margin:0">هنوز میوه‌ای نداری. هر درخت پرتقال، سیب یا گیلاس که کامل شود ${fa(YIELD)} میوه به انبارت می‌دهد.</p>`)+`</section>`;
  if(gl.length)h+=`<section class="glass"><h2>هدیه‌های ساخته‌شده</h2><ul class="glist">${gl.map((g,i)=>`<li><span>${g.k==='b'?'دسته‌گل':'سبد میوه'} · ${fa(g.n)} ${g.k==='b'?'گل':'میوه'}<small>${fmtJ(g.d)}</small></span><span class="acts"><button class="btn sm" data-a="cp" data-v="${i}">کپی لینک</button><button class="btn sm" data-a="sh" data-v="${i}">ارسال</button></span></li>`).join('')}</ul></section>`;
- h+=`<section class="glass"><h2>آدرس لینک هدیه <small>اختیاری</small></h2><input class="in" id="gbase" data-in="gbase" dir="ltr" inputmode="url" value="${esc(GSET().giftBase||'')}" placeholder="https://example.netlify.app" autocomplete="off"><p class="note" style="margin:8px 0 0">اگر نمی‌خواهی لینک‌ها آدرس گیت‌هاب داشته باشند، همین اپ را جای دیگری منتشر کن و آدرسش را اینجا بگذار. خالی بماند، آدرس پیش‌فرض استفاده می‌شود.</p></section>`;
+ h+=`<section class="glass"><h2>آدرس لینک هدیه <small>اختیاری</small></h2><input class="in" id="gbase" data-in="gbase" dir="ltr" inputmode="url" value="${esc(GSET().giftBase||'')}" placeholder="https://example.netlify.app" autocomplete="off"><p class="note" style="margin:8px 0 0">لینک‌ها با آدرس flowerlife.netlify.app ساخته می‌شوند. فقط اگر آدرس سایتت عوض شد اینجا بنویس. خالی بماند، همان پیش‌فرض استفاده می‌شود.</p></section>`;
  return h}
 function viewAway(){
  return`<div class="seg" role="tablist" style="grid-template-columns:repeat(2,1fr)">${[['grow','کاشتن'],['gift','هدیه']].map(x=>`<button class="${S.atab===x[0]?'on':''}" data-a="atab" data-v="${x[0]}">${x[1]}</button>`).join('')}</div>`+(S.atab==='gift'?viewGift():viewGrow())}
@@ -634,14 +634,15 @@ function viewRemind(){
  const rs=RS(),td=todayIso(),timed=(S.rd.days.get(td)&&S.rd.days.get(td).tasks||[]).filter(t=>t.r).sort((a,b)=>a.r<b.r?-1:1);
  let h=`<section class="glass"><h2>یادآورهای روزانه</h2>${rs.length?rs.map(remRow).join(''):'<div class="empty">هنوز یادآوری نساخته‌ای</div>'}<div class="add"><input class="in" id="rLabel" placeholder="متن یادآور" maxlength="60"><input class="in" type="time" id="rTime" value="08:00" style="flex:none;width:auto;direction:ltr"><button class="btn red" data-a="rAdd">افزودن</button></div><div class="chips">${SUGG.map((s,i)=>`<button class="chip" data-a="rChip" data-v="${i}">${s[0]} · ${fa(s[1])}</button>`).join('')}</div></section>`;
  h+=`<section class="glass"><h2>یادآور وظایف امروز <small>از ساعتی که روی هر وظیفه می‌گذاری</small></h2>${timed.length?`<ul class="hist">${timed.map(t=>`<li><span${t.d?' class="w"':''}>${esc(t.t)}</span><span class="w" dir="ltr">${fa(t.r)}</span></li>`).join('')}</ul>`:'<div class="empty">وظیفه‌ای با ساعت یادآور نداری. در برگه‌ی برنامه، روی ساعت کنار هر وظیفه بزن.</div>'}</section>`;
- h+=`<section class="glass"><h2>اعلان روی گوشی</h2><p class="note" style="margin:0 0 12px">یادآورها وقتی همین صفحه باز است با پیام و صدا نشان داده می‌شوند. برای اعلان واقعی روی گوشی، حتی وقتی صفحه بسته است، در چت با Claude بنویس «برام یادآور روی گوشی بساز» و ساعت‌هایت را بگو؛ آلارم یا یادآور تقویم همان‌جا ساخته می‌شود.</p>${typeof Notification!=='undefined'&&Notification.permission!=='granted'?`<button class="btn" data-a="notif">فعال‌سازی اعلان مرورگر</button>`:''}</section>`;
+ h+=NAT?`<section class="glass"><h2>اعلان روی گوشی</h2><p class="note" style="margin:0 0 12px">${S.nat.perm==='granted'?'اعلان‌ها فعال‌اند. یادآورها سر ساعت و پایان رشد گل، حتی وقتی اپ بسته است، اعلان می‌دهند. هنگام کاشتن گل یا درخت هم شمارش معکوس بالای صفحه‌ی گوشی نشان داده می‌شود.':'برای اینکه یادآورها و شمارش معکوس گل روی گوشی بیایند، اجازه‌ی اعلان لازم است.'}</p><div style="display:flex;gap:8px;flex-wrap:wrap">${S.nat.perm!=='granted'?'<button class="btn red" data-a="natOn">فعال‌سازی اعلان</button>':''}<button class="btn" data-a="natTest">اعلان آزمایشی</button></div>${S.nat.exact==='denied'?'<p class="note" style="margin:12px 0 8px">برای اینکه اعلان‌ها سر ساعت دقیق بیایند، اجازه‌ی «زنگ و یادآور» را هم روشن کن.</p><button class="btn" data-a="natExact">تنظیم زنگ دقیق</button>':''}</section>`:`<section class="glass"><h2>اعلان روی گوشی</h2><p class="note" style="margin:0 0 12px">اعلان واقعی گوشی فقط در اپ نصب‌شده‌ی فلاور لایف کار می‌کند. در این نمایش، یادآورها وقتی صفحه باز است با پیام و صدا نشان داده می‌شوند.</p>${typeof Notification!=='undefined'&&Notification.permission!=='granted'?`<button class="btn" data-a="notif">فعال‌سازی اعلان مرورگر</button>`:''}</section>`;
  if(STANDALONE)h+=`<section class="glass"><h2>پشتیبان‌گیری <small>داده‌ها فقط روی این گوشی‌اند</small></h2><p class="note" style="margin:0 0 12px">اگر اطلاعات مرورگر پاک شود، داده‌ها هم می‌روند. هر چند وقت یک بار فایل پشتیبان بگیر. بازیابی، داده‌های فعلی را با محتوای فایل عوض می‌کند.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-a="export">گرفتن فایل پشتیبان</button><label class="btn" style="cursor:pointer">بازیابی از فایل<input type="file" id="imp" accept="application/json,.json" hidden></label></div></section>`;
  return h}
 function render(){
  const view={plan:viewPlan,stats:viewStats,away:viewAway,remind:viewRemind}[S.tab]();
  $('#app').innerHTML=(S.demo?demoBanner():'')+(S.upd?`<section class="glass hint"><p style="margin:0 0 10px">نسخه‌ی <span dir="ltr">${esc(S.upd)}</span> آماده است. روی همین نسخه نصب می‌شود و اطلاعاتت پاک نمی‌شود.</p><a class="btn red sm" href="${REL_URL}" target="_blank" rel="noopener">دانلود نسخه‌ی جدید</a></section>`:'')+header()+view+foot();
  $('#nav').innerHTML=navHTML();
- if(S.refocus){S.refocus=false;const i=$('#newTask');if(i)i.focus()}}
+ if(S.refocus){S.refocus=false;const i=$('#newTask');if(i)i.focus()}
+ natSync()}
 const isEditing=()=>{const a=document.activeElement;return!!a&&/^(INPUT|TEXTAREA)$/.test(a.tagName)};
 function renderSoft(){if(isEditing()){S.pending=true;return}S.pending=false;render()}
 
@@ -685,6 +686,32 @@ function tick(){
  const now=new Date(),a=S.rd.meta.get('away');
  if(a&&a.end){if(Date.now()>=a.end){const f=FLW[a.type]||FLW.lily;finishAway(a,'grown');notify(f.kind==='tree'?'درختت کامل شد':'گلت کامل شد','«'+f.name+'» · '+dur(f.mins)+' دور از گوشی'+(f.kind==='tree'&&f.fruit?' · '+fa(YIELD)+' '+FR[f.fruit].n+' به انبار اضافه شد':''));renderSoft()}else if(S.tab==='away')updateLive(a)}
  if(now.getSeconds()%15===0)checkReminders(now)}
+/* ---------- native phone notifications (Android app only) ---------- */
+const NAT=(()=>{try{return window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()?{LN:Capacitor.registerPlugin('LocalNotifications'),CD:Capacitor.registerPlugin('Countdown')}:null}catch(e){return null}})();
+const nid=s=>{let h=7;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%2000000000;return h+1000};
+async function natPerms(ask){if(!NAT)return;try{let p=await NAT.LN.checkPermissions();if(p.display!=='granted'&&ask)p=await NAT.LN.requestPermissions();S.nat.perm=p.display;
+  try{const e=await NAT.LN.checkExactNotificationSetting();S.nat.exact=e.exact_alarm}catch(x){S.nat.exact='granted'}}catch(e){}}
+function natPlan(){const out=[],now=Date.now();
+ RS().forEach(r=>{if(!r.on||!r.time)return;const[hh,mm]=r.time.split(':').map(Number);(r.days||[]).forEach((on,i)=>{if(!on)return;
+  out.push({id:nid('r'+r.id+':'+i),title:r.label||'یادآور',body:'یادآور '+fa(r.time),channelId:'reminders',schedule:{on:{weekday:((i+6)%7)+1,hour:hh,minute:mm},allowWhileIdle:true}})})});
+ for(let k=0;k<14;k++){const dk=addD(todayIso(),k),d=S.rd.days.get(dk);if(!d||!d.tasks)continue;
+  d.tasks.forEach(t=>{if(!t.r||t.d)return;const[hh,mm]=t.r.split(':').map(Number),p=dk.split('-').map(Number),at=new Date(p[0],p[1]-1,p[2],hh,mm,0);
+   if(at.getTime()>now)out.push({id:nid('t'+t.id+dk),title:t.t,body:'وقت این وظیفه است · '+fa(t.r),channelId:'reminders',schedule:{at,allowWhileIdle:true}})})}
+ const a=S.rd.meta.get('away');if(a&&a.end&&a.end>now){const f=FLW[a.type]||FLW.lily;
+  out.push({id:9001,title:f.kind==='tree'?'درختت کامل شد':'گلت کامل شد',body:'«'+f.name+'» · '+dur(f.mins)+' دور از گوشی'+(f.kind==='tree'&&f.fruit?' · '+fa(YIELD)+' '+FR[f.fruit].n+' به انبار اضافه شد':''),channelId:'away',schedule:{at:new Date(a.end),allowWhileIdle:true}})}
+ return out}
+let natSig='',natBusy=false,natTimer=null;
+function natSync(){if(!NAT)return;clearTimeout(natTimer);natTimer=setTimeout(async()=>{
+ const plan=natPlan(),a=S.rd.meta.get('away'),live=a&&a.end&&a.end>Date.now(),sig=JSON.stringify(plan.map(p=>[p.id,p.title,p.schedule]))+'|'+(live?a.id+a.end:'');
+ if(sig===natSig||natBusy)return;natBusy=true;
+ try{await natPerms(true);
+  await NAT.LN.createChannel({id:'reminders',name:'یادآورها',description:'یادآور روزانه و وظایف',importance:5,visibility:1,vibration:true});
+  await NAT.LN.createChannel({id:'away',name:'پایان رشد گل',description:'وقتی گل یا درخت کامل می‌شود',importance:4,visibility:1,vibration:true});
+  const pd=await NAT.LN.getPending();if(pd.notifications&&pd.notifications.length)await NAT.LN.cancel({notifications:pd.notifications.map(n=>({id:n.id}))});
+  if(plan.length)await NAT.LN.schedule({notifications:plan});
+  if(live){const f=FLW[a.type]||FLW.lily;await NAT.CD.start({end:a.end,title:'دور از گوشی · '+f.name,text:'زمان باقی‌مانده تا کامل شدن'})}else await NAT.CD.stop();
+  natSig=sig}catch(e){}
+ natBusy=false},1200)}
 /* ---------- gifts ---------- */
 const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 const b64d=s=>JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));
@@ -748,6 +775,9 @@ function act(a,v,el){
  case'demo':S.dd=makeDemo();S.demo=true;render();break;
  case'demoOff':S.demo=false;render();break;
  case'export':{try{const bl=new Blob([JSON.stringify({v:1,days:[...S.rd.days],fl:[...S.rd.fl],meta:[...S.rd.meta]})],{type:'application/json'}),u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='planner-backup-'+todayIso()+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('فایل پشتیبان ساخته شد','در پوشه‌ی دانلودها')}catch(e){toast('گرفتن پشتیبان ممکن نشد')}break}
+ case'natOn':natPerms(true).then(()=>{render()});break;
+ case'natExact':try{NAT.LN.changeExactNotificationSetting().then(()=>natPerms(false)).then(()=>render())}catch(e){}break;
+ case'natTest':try{NAT.LN.schedule({notifications:[{id:9002,title:'اعلان آزمایشی',body:'اگر این را می‌بینی اعلان‌ها درست کار می‌کنند',channelId:'reminders',schedule:{at:new Date(Date.now()+5000),allowWhileIdle:true}}]});toast('اعلان آزمایشی','تا چند ثانیه‌ی دیگر می‌آید. می‌توانی اپ را ببندی.')}catch(e){}break;
  case'notif':try{Notification.requestPermission().then(p=>{toast(p==='granted'?'اعلان مرورگر فعال شد':'اعلان مرورگر اجازه نگرفت');render()})}catch(e){toast('اعلان مرورگر در این نمایش پشتیبانی نمی‌شود')}break;
  }}
 /* ---------- events ---------- */
@@ -788,7 +818,7 @@ function checkUpdate(){try{if(!window.Capacitor||typeof fetch!=='function')retur
  fetch(UPD_API,{signal:c.signal,headers:{Accept:'application/vnd.github+json'}}).then(r=>r.json()).then(o=>{clearTimeout(tm);const n=x=>String(x||'').replace(/^v/,'').split('.').map(y=>+y||0),a=n(o.tag_name),b=n(APP_VER);
   for(let i=0;i<3;i++){if((a[i]|0)>(b[i]|0)){S.upd=String(o.tag_name).replace(/^v/,'');renderSoft();return}if((a[i]|0)<(b[i]|0))return}}).catch(()=>{})}catch(e){}}
 async function init(){
- loadLocal();render();setInterval(tick,1000);checkUpdate();
+ loadLocal();render();setInterval(tick,1000);checkUpdate();natPerms(false).then(()=>{if(S.tab==='remind')renderSoft()});
  try{if(window.claude&&claude.use){const r=await Promise.all([claude.use('db'),claude.use('user')]),db=r[0],user=r[1],id=user?await user.id():null;
   if(db&&id){S.base=db.doc('data/users/'+id+'/app');subscribe()}}}catch(e){}
  renderSoft()}
